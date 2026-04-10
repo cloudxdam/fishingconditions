@@ -1,4 +1,4 @@
-package com.pachedev.fishingconditions.model;
+package com.pachedev.fishingconditions.model.weather;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  * Each list contains values for the same hours.
  * For example, index 0 in all lists refers to the same time.
  */
-public class HourlyData {
+public class WeatherHourlyData {
 
     /** Hour timestamps (e.g. "2026-04-05T00:00") */
     @SerializedName("time")
