@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(FishingConditionsData fishingConditionsData) {
 
                 tvResult.setText(
-                        String.format("Temperature: %s°C\nWind: %s\nSunrise: %s\nSunset: %s\nWave height: %s m\nWave period: %s s", fishingConditionsData.getTemperature(), fishingConditionsData.getWindSpeed(), fishingConditionsData.getSunrise(), fishingConditionsData.getSunset(), fishingConditionsData.getWaveHeight(), fishingConditionsData.getWavePeriod())
+                        String.format("Temperature: %s°C\nWind: %s\nSunrise: %s\nSunset: %s\nWave height: %s m\nWave period: %s s\nMoon phase: %s", fishingConditionsData.getTemperature(), fishingConditionsData.getWindSpeed(), fishingConditionsData.getSunrise(), fishingConditionsData.getSunset(), fishingConditionsData.getWaveHeight(), fishingConditionsData.getWavePeriod(), fishingConditionsData.getMoonPhase().toString().toLowerCase())
                 );
             }
 
