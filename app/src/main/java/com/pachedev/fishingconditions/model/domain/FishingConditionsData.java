@@ -11,14 +11,16 @@ public class FishingConditionsData {
     private final String sunset;
     private final Double waveHeight;
     private final Double wavePeriod;
+    private final MoonPhase moonPhase;
 
-    public FishingConditionsData(Double temperature, Double windSpeed, String sunrise, String sunset, Double waveHeight, Double wavePeriod) {
+    public FishingConditionsData(Double temperature, Double windSpeed, String sunrise, String sunset, Double waveHeight, Double wavePeriod, MoonPhase moonPhase) {
         this.temperature = temperature;
         this.windSpeed = windSpeed;
         this.sunrise = sunrise;
         this.sunset = sunset;
         this.waveHeight = waveHeight;
         this.wavePeriod = wavePeriod;
+        this.moonPhase = moonPhase;
     }
 
     public Double getTemperature() {
@@ -44,4 +46,6 @@ public class FishingConditionsData {
     public Double getWavePeriod() {
         return wavePeriod;
     }
+
+    public MoonPhase getMoonPhase() { return moonPhase; }
 }
