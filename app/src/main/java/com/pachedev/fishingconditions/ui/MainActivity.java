@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(FishingConditionsData fishingConditionsData) {
 
                 tvResult.setText(
-                        String.format("Temperature: %s°C\nWind: %s\nSunrise: %s\nSunset: %s\nWave height: %s m\nWave period: %s s\nMoon phase: %s", DisplayFormatter.formatDecimal(fishingConditionsData.getTemperature(), "°C"), DisplayFormatter.formatDecimal(fishingConditionsData.getWindSpeed(), "km/h"), DisplayFormatter.formatTime(fishingConditionsData.getSunrise()), DisplayFormatter.formatTime(fishingConditionsData.getSunset()), DisplayFormatter.formatDecimal(fishingConditionsData.getWaveHeight(), "m"), DisplayFormatter.formatDecimal(fishingConditionsData.getWavePeriod(), "s"), DisplayFormatter.formatMoonPhase(fishingConditionsData.getMoonPhase())));
+                        String.format("Temperature: %s\nWind: %s\nSunrise: %s\nSunset: %s\nWave height: %s\nWave period: %s\nMoon phase: %s", DisplayFormatter.formatDecimal(fishingConditionsData.getTemperature(), "°C"), DisplayFormatter.formatDecimal(fishingConditionsData.getWindSpeed(), "km/h"), DisplayFormatter.formatTime(fishingConditionsData.getSunrise()), DisplayFormatter.formatTime(fishingConditionsData.getSunset()), DisplayFormatter.formatDecimal(fishingConditionsData.getWaveHeight(), "m"), DisplayFormatter.formatDecimal(fishingConditionsData.getWavePeriod(), "s"), DisplayFormatter.formatMoonPhase(fishingConditionsData.getMoonPhase())));
             }
 
             @Override
