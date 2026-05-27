@@ -13,8 +13,22 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        val mareaApiKey = providers.gradleProperty("MAREA_API_KEY").orNull ?: ""
+
+        buildConfigField(
+            "String",
+            "MAREA_API_KEY",
+            "\"$mareaApiKey\""
+            )
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+
 
     buildTypes {
         release {
