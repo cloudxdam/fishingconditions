@@ -1,5 +1,16 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
+}
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use {
+        localProperties.load(it)
+    }
 }
 
 android {
@@ -13,8 +24,22 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        val mareaApiKey = localProperties.getProperty("MAREA_API_KEY") ?: ""
+
+        buildConfigField(
+            "String",
+            "MAREA_API_KEY",
+            "\"$mareaApiKey\""
+            )
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+
 
     buildTypes {
         release {

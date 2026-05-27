@@ -4,6 +4,7 @@ import com.pachedev.fishingconditions.model.domain.MoonPhase;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -11,21 +12,6 @@ import java.time.format.DateTimeFormatter;
  */
 public class DisplayFormatter {
 
-    /**
-     * Pasar de esto:
-     *
-     * 2026-04-11T07:45
-     * WANING_CRESCENT
-     * 14.812345
-     * 5.399999
-     *
-     * a algo más limpio para el usuario:
-     *
-     * 07:45
-     * Waning Crescent
-     * 14.8 °C
-     * 5.4 m
-     */
 private static final DateTimeFormatter INPUT_DATE_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 private static final DateTimeFormatter OUTPUT_TIME = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -33,10 +19,19 @@ private DisplayFormatter () {
     // Prevent instantiation
 }
 
-public static String formatTime(String dateTime) {
-    LocalDateTime parsedDateTime = LocalDateTime.parse(dateTime, INPUT_DATE_TIME);
-    return parsedDateTime.format(OUTPUT_TIME);
-}
+    public static String formatTime(String dateTime) {
+        if (dateTime == null || dateTime.isEmpty()) {
+            return "N/A";
+        }
+
+        try {
+            LocalDateTime parsedDateTime = LocalDateTime.parse(dateTime);
+            return parsedDateTime.format(OUTPUT_TIME);
+        } catch (Exception e) {
+            OffsetDateTime parsedDateTime = OffsetDateTime.parse(dateTime);
+            return parsedDateTime.format(OUTPUT_TIME);
+        }
+    }
 
 public static String formatMoonPhase(MoonPhase moonPhase) {
     String[] words = moonPhase.name().toLowerCase().split("_");
