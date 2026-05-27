@@ -32,12 +32,26 @@ public class MainActivity extends AppCompatActivity {
     private void loadFishingConditions() {
         tvResult.setText("Loading fishing conditions...");
 
-        fishingConditionsRepository.getFishingConditions(new FishingConditionsRepository.FishingCoinditionsCallback() {
+        fishingConditionsRepository.getFishingConditions(new FishingConditionsRepository.FishingConditionsCallback() {
             @Override
             public void onSuccess(FishingConditionsData fishingConditionsData) {
 
                 tvResult.setText(
-                        String.format("Temperature: %s\nWind: %s\nSunrise: %s\nSunset: %s\nWave height: %s\nWave period: %s\nMoon phase: %s", DisplayFormatter.formatDecimal(fishingConditionsData.getTemperature(), "°C"), DisplayFormatter.formatDecimal(fishingConditionsData.getWindSpeed(), "km/h"), DisplayFormatter.formatTime(fishingConditionsData.getSunrise()), DisplayFormatter.formatTime(fishingConditionsData.getSunset()), DisplayFormatter.formatDecimal(fishingConditionsData.getWaveHeight(), "m"), DisplayFormatter.formatDecimal(fishingConditionsData.getWavePeriod(), "s"), DisplayFormatter.formatMoonPhase(fishingConditionsData.getMoonPhase())));
+                        String.format(
+                                "Temperature: %s\nWind: %s\nSunrise: %s\nSunset: %s\n" +
+                                        "Wave height: %s\nWave period: %s\nMoon phase: %s\n" +
+                                        "Next high tide: %s (%s)\nNext low tide: %s (%s)",
+                                DisplayFormatter.formatDecimal(fishingConditionsData.getTemperature(), "°C"),
+                                DisplayFormatter.formatDecimal(fishingConditionsData.getWindSpeed(), "km/h"),
+                                DisplayFormatter.formatTime(fishingConditionsData.getSunrise()),
+                                DisplayFormatter.formatTime(fishingConditionsData.getSunset()),
+                                DisplayFormatter.formatDecimal(fishingConditionsData.getWaveHeight(), "m"),
+                                DisplayFormatter.formatDecimal(fishingConditionsData.getWavePeriod(), "s"),
+                                DisplayFormatter.formatMoonPhase(fishingConditionsData.getMoonPhase()),
+                                DisplayFormatter.formatTime(fishingConditionsData.getTideInfo().getNextHighTideTime()),
+                                DisplayFormatter.formatDecimal(fishingConditionsData.getTideInfo().getNextHighTideHeight(), "m"),
+                                DisplayFormatter.formatTime(fishingConditionsData.getTideInfo().getNextLowTideTime()),
+                DisplayFormatter.formatDecimal(fishingConditionsData.getTideInfo().getNextLowTideHeight(), "m")));
             }
 
             @Override

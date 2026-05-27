@@ -13,7 +13,7 @@ public interface TideApiService {
 
     @GET("v2/tides")
     Call<TideResponse> getTides(
-            @Query("latiture") double latitude,
+            @Query("latitude") double latitude,
             @Query("longitude") double longitude
     );
 }

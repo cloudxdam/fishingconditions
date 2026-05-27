@@ -1,7 +1,5 @@
 package com.pachedev.fishingconditions.data.network;
 
-import com.google.gson.internal.GsonBuildConfig;
-
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -29,7 +27,7 @@ public class TideRetrofitInstance {
                     .addInterceptor(chain -> chain.proceed(
                             chain.request()
                                     .newBuilder()
-                                    .addHeader("x-marea-api-key", API_KEY)
+                                    .addHeader("x-marea-api-token", API_KEY)
                                     .build()
                     )).build();
 
