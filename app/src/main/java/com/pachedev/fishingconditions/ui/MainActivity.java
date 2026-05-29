@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvSelectedTime;
     private TextView tvFishingScore;
 
+    private TextView tvFishingScoreDescription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         btnSelectTime = findViewById(R.id.btnSelectTime);
         tvSelectedTime = findViewById(R.id.tvSelectedTime);
         tvFishingScore = findViewById(R.id.tvFishingScore);
+        tvFishingScoreDescription = findViewById(R.id.tvFishingScoreDescription);
 
         btnSelectTime.setOnClickListener(v -> showTimePicker());
 
@@ -145,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
         tvMoonPhase.setText("");
         tvHighTide.setText("");
         tvLowTide.setText("");
+        tvFishingScoreDescription.setText("");
     }
 
     /**
@@ -196,6 +200,21 @@ public class MainActivity extends AppCompatActivity {
 
         tvFishingScore.setText(String.format(Locale.getDefault(),"Fishing Score: %d / 100",data.getFishingScore()));
 
+        int score = data.getFishingScore();
+
+        tvFishingScoreDescription.setText(
+                DisplayFormatter.formatFishingScoreDescription(score)
+        );
+
+        if (score >= 80) {
+            tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_green_dark));
+        } else if (score >= 60) {
+            tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_blue_dark));
+        } else if (score >= 40) {
+            tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_orange_dark));
+        } else {
+            tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_red_dark));
+        }
     }
 
     private void showError(String errorMessage) {
