@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private LocalDateTime selectedDateTime = LocalDateTime.now();
     private Button btnSelectTime;
     private TextView tvSelectedTime;
+    private TextView tvFishingScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         tvSelectedDate = findViewById(R.id.tvSelectedDate);
         btnSelectTime = findViewById(R.id.btnSelectTime);
         tvSelectedTime = findViewById(R.id.tvSelectedTime);
+        tvFishingScore = findViewById(R.id.tvFishingScore);
 
         btnSelectTime.setOnClickListener(v -> showTimePicker());
 
@@ -176,6 +178,9 @@ public class MainActivity extends AppCompatActivity {
         tvHighTide.setText(String.format("Next high tide: %s (%s)", highTideTime, highTideHeight));
 
         tvLowTide.setText(String.format("Next low tide: %s (%s)", lowTideTime, lowTideHeight));
+
+        tvFishingScore.setText(String.format(Locale.getDefault(),"Fishing Score: %d / 100",data.getFishingScore()));
+
     }
 
     private void showError(String errorMessage) {

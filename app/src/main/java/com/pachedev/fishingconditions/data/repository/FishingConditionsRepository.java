@@ -15,6 +15,7 @@ import com.pachedev.fishingconditions.model.tides.TideExtreme;
 import com.pachedev.fishingconditions.model.tides.TideResponse;
 import com.pachedev.fishingconditions.model.tides.TideState;
 import com.pachedev.fishingconditions.model.weather.WeatherResponse;
+import com.pachedev.fishingconditions.utils.FishingScoreCalculator;
 import com.pachedev.fishingconditions.utils.MoonPhaseCalculator;
 
 import java.time.LocalDateTime;
@@ -172,6 +173,7 @@ public class FishingConditionsRepository {
                 nextHighTide != null ? nextHighTide.getHeight() : null,
                 nextLowTide != null ? nextLowTide.getDateTime() : null,
                 nextLowTide != null ? nextLowTide.getHeight() : null
+
         );
     }
 
@@ -193,15 +195,30 @@ public class FishingConditionsRepository {
                 selectedDateTime
         );
 
+        Double temperature = weatherResponse.getHourly().getTemperature2m().get(weatherIndex);
+        Double windSpeed = weatherResponse.getHourly().getWindSpeed10m().get(weatherIndex);
+        Double waveHeight = marineResponse.getHourly().getWaveHeight().get(marineIndex);
+        Double wavePeriod = marineResponse.getHourly().getWavePeriod().get(marineIndex);
+
+        int fishingScore = FishingScoreCalculator.calculateScore(
+                windSpeed,
+                waveHeight,
+                wavePeriod,
+                moonPhase,
+                tideInfo,
+                selectedDateTime
+        );
+
         FishingConditionsData fishingConditionsData = new FishingConditionsData(
-                weatherResponse.getHourly().getTemperature2m().get(weatherIndex),
-                weatherResponse.getHourly().getWindSpeed10m().get(weatherIndex),
+                temperature,
+                windSpeed,
                 weatherResponse.getDaily().getSunrise().get(0),
                 weatherResponse.getDaily().getSunset().get(0),
-                marineResponse.getHourly().getWaveHeight().get(marineIndex),
-                marineResponse.getHourly().getWavePeriod().get(marineIndex),
+                waveHeight,
+                wavePeriod,
                 moonPhase,
-                tideInfo
+                tideInfo,
+                fishingScore
         );
 
         callback.onSuccess(fishingConditionsData);
