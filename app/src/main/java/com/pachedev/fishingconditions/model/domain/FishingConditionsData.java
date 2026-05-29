@@ -15,6 +15,8 @@ public class FishingConditionsData {
     private final TideInfo tideInfo;
     private final int fishingScore;
 
+    private final Double windDirection;
+
     public FishingConditionsData(Double temperature,
                                  Double windSpeed,
                                  String sunrise,
@@ -23,7 +25,8 @@ public class FishingConditionsData {
                                  Double wavePeriod,
                                  MoonPhase moonPhase,
                                  TideInfo tideInfo,
-                                 int fishingScore) {
+                                 int fishingScore,
+                                 Double windDirection) {
         this.temperature = temperature;
         this.windSpeed = windSpeed;
         this.sunrise = sunrise;
@@ -33,6 +36,7 @@ public class FishingConditionsData {
         this.moonPhase = moonPhase;
         this.tideInfo = tideInfo;
         this.fishingScore = fishingScore;
+        this.windDirection = windDirection;
     }
 
     public Double getTemperature() {
@@ -59,9 +63,19 @@ public class FishingConditionsData {
         return wavePeriod;
     }
 
-    public MoonPhase getMoonPhase() { return moonPhase; }
+    public MoonPhase getMoonPhase() {
+        return moonPhase;
+    }
 
-    public TideInfo getTideInfo() {return tideInfo; }
+    public TideInfo getTideInfo() {
+        return tideInfo;
+    }
 
-    public int getFishingScore() { return fishingScore; }
+    public int getFishingScore() {
+        return fishingScore;
+    }
+
+    public Double getWindDirection() {
+        return windDirection;
+    }
 }

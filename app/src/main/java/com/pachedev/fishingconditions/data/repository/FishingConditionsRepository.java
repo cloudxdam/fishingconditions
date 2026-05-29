@@ -51,7 +51,7 @@ public class FishingConditionsRepository {
         Call<WeatherResponse> weatherCall = weatherApiService.getWeatherData(
                 spot.getLatitude(),
                 spot.getLongitude(),
-                "temperature_2m,wind_speed_10m",
+                "temperature_2m,wind_speed_10m,wind_direction_10m",
                 "sunrise,sunset",
                 "Atlantic/Canary",
                 selectedDate,
@@ -199,6 +199,7 @@ public class FishingConditionsRepository {
         Double windSpeed = weatherResponse.getHourly().getWindSpeed10m().get(weatherIndex);
         Double waveHeight = marineResponse.getHourly().getWaveHeight().get(marineIndex);
         Double wavePeriod = marineResponse.getHourly().getWavePeriod().get(marineIndex);
+        Double windDirection = weatherResponse.getHourly().getWindDirection10m().get(weatherIndex);
 
         int fishingScore = FishingScoreCalculator.calculateScore(
                 windSpeed,
@@ -218,7 +219,8 @@ public class FishingConditionsRepository {
                 wavePeriod,
                 moonPhase,
                 tideInfo,
-                fishingScore
+                fishingScore,
+                windDirection
         );
 
         callback.onSuccess(fishingConditionsData);
