@@ -23,6 +23,10 @@ public class WeatherHourlyData {
     @SerializedName("wind_speed_10m")
     private List<Double> windSpeed10m;
 
+    /** Wind direction at 10 meters */
+    @SerializedName("wind_direction_10m")
+    private List<Double> windDirection10m;
+
     public List<String> getTime() {
         return time;
     }
@@ -33,5 +37,8 @@ public class WeatherHourlyData {
 
     public List<Double> getWindSpeed10m() {
         return windSpeed10m;
+    }
+
+    public List<Double> getWindDirection10m() { return windDirection10m;
     }
 }

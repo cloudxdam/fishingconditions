@@ -110,6 +110,9 @@ public class MainActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+    /**
+     * Loads fishing conditions for the selected spot and date.
+     */
     private void loadFishingConditions() {
         setLoadingState();
 
@@ -144,6 +147,11 @@ public class MainActivity extends AppCompatActivity {
         tvLowTide.setText("");
     }
 
+    /**
+     * Displays fishing conditions in the UI.
+     *
+     * @param data fishing conditions data
+     */
     private void showFishingConditions(FishingConditionsData data) {
         String highTideTime = DisplayFormatter.formatTime(
                 data.getTideInfo().getNextHighTideTime()
@@ -163,7 +171,14 @@ public class MainActivity extends AppCompatActivity {
 
         tvTemperature.setText(String.format("Temperature: %s", DisplayFormatter.formatDecimal(data.getTemperature(), "°C")));
 
-        tvWind.setText(String.format("Wind: %s", DisplayFormatter.formatDecimal(data.getWindSpeed(), "km/h")));
+        tvWind.setText(
+                String.format(
+                        Locale.getDefault(),
+                        "Wind: %s - %s",
+                        DisplayFormatter.formatWindDirection(data.getWindDirection()),
+                        DisplayFormatter.formatDecimal(data.getWindSpeed(), "km/h")
+                )
+        );
 
         tvSunrise.setText(String.format("Sunrise: %s", DisplayFormatter.formatTime(data.getSunrise())));
 
@@ -187,6 +202,9 @@ public class MainActivity extends AppCompatActivity {
         tvTemperature.setText(String.format("Error: %s", errorMessage));
     }
 
+    /**
+     * Initializes the available fishing spots.
+     */
     private void setupFishingSpots() {
         fishingSpots = Arrays.asList(
                 new FishingSpot("Palm Mar", 28.0244, -16.6417),
