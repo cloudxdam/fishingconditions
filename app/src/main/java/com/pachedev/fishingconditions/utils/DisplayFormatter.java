@@ -94,4 +94,22 @@ public static String formatMoonPhase(MoonPhase moonPhase) {
             return "↖ NW";
         }
     }
+
+    /**
+     * Formats the fishing score as a readable condition label.
+     *
+     * @param score fishing score
+     * @return condition label
+     */
+    public static String formatFishingScoreDescription(int score) {
+        if (score >= 80) {
+            return "Excellent Conditions";
+        } else if (score >= 60) {
+            return "Good Conditions";
+        } else if (score >= 40) {
+            return "Fair Conditions";
+        } else {
+            return "Poor Conditions";
+        }
+    }
 }
