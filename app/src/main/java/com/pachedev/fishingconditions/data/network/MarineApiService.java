@@ -11,12 +11,12 @@ import retrofit2.http.Query;
 public interface MarineApiService {
 
     @GET("marine")
-    Call<MarineResponse> getMarineData (
+    Call<MarineResponse> getMarineData(
             @Query("latitude") double latitude,
             @Query("longitude") double longitude,
             @Query("hourly") String hourly,
-            @Query("timezone") String timezone
+            @Query("timezone") String timezone,
+            @Query("start_date") String startDate,
+            @Query("end_date") String endDate
     );
-
-
 }

@@ -7,6 +7,7 @@ import com.pachedev.fishingconditions.data.network.TideRetrofitInstance;
 import com.pachedev.fishingconditions.data.network.WeatherApiService;
 import com.pachedev.fishingconditions.data.network.WeatherRetrofitInstance;
 import com.pachedev.fishingconditions.model.domain.FishingConditionsData;
+import com.pachedev.fishingconditions.model.domain.FishingSpot;
 import com.pachedev.fishingconditions.model.domain.MoonPhase;
 import com.pachedev.fishingconditions.model.domain.TideInfo;
 import com.pachedev.fishingconditions.model.marine.MarineResponse;
@@ -16,7 +17,7 @@ import com.pachedev.fishingconditions.model.tides.TideState;
 import com.pachedev.fishingconditions.model.weather.WeatherResponse;
 import com.pachedev.fishingconditions.utils.MoonPhaseCalculator;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import retrofit2.Call;
@@ -43,13 +44,17 @@ public class FishingConditionsRepository {
                 .create(TideApiService.class);
     }
 
-    public void getFishingConditions(FishingConditionsCallback callback) {
+    public void getFishingConditions(FishingSpot spot, LocalDateTime selectedDateTime, FishingConditionsCallback callback) {
+        String selectedDate = selectedDateTime.toLocalDate().toString();
+
         Call<WeatherResponse> weatherCall = weatherApiService.getWeatherData(
-                28.12,
-                -16.73,
+                spot.getLatitude(),
+                spot.getLongitude(),
                 "temperature_2m,wind_speed_10m",
                 "sunrise,sunset",
-                "Atlantic/Canary"
+                "Atlantic/Canary",
+                selectedDate,
+                selectedDate
         );
 
         weatherCall.enqueue(new Callback<WeatherResponse>() {
@@ -57,7 +62,11 @@ public class FishingConditionsRepository {
             public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     WeatherResponse weatherResponse = response.body();
-                    loadMarineData(weatherResponse, callback);
+                    loadMarineData(
+                            spot,
+                            selectedDateTime,
+                            weatherResponse,
+                            callback);
                 } else {
                     callback.onError("Weather response error: " + response.code());
                 }
@@ -70,13 +79,17 @@ public class FishingConditionsRepository {
         });
     }
 
-    private void loadMarineData(WeatherResponse weatherResponse,
+    private void loadMarineData(FishingSpot spot, LocalDateTime selectedDateTime, WeatherResponse weatherResponse,
                                 FishingConditionsCallback callback) {
+        String selectedDate = selectedDateTime.toLocalDate().toString();
+
         Call<MarineResponse> marineCall = marineApiService.getMarineData(
-                28.12,
-                -16.73,
+                spot.getLatitude(),
+                spot.getLongitude(),
                 "wave_height,wave_period",
-                "Atlantic/Canary"
+                "Atlantic/Canary",
+                selectedDate,
+                selectedDate
         );
 
         marineCall.enqueue(new Callback<MarineResponse>() {
@@ -84,7 +97,12 @@ public class FishingConditionsRepository {
             public void onResponse(Call<MarineResponse> call, Response<MarineResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     MarineResponse marineResponse = response.body();
-                    loadTideData(weatherResponse, marineResponse, callback);
+                    loadTideData(
+                            spot,
+                            selectedDateTime,
+                            weatherResponse,
+                            marineResponse,
+                            callback);
                 } else {
                     callback.onError("Marine response error: " + response.code());
                 }
@@ -97,12 +115,14 @@ public class FishingConditionsRepository {
         });
     }
 
-    private void loadTideData(WeatherResponse weatherResponse,
+    private void loadTideData(FishingSpot spot,
+                              LocalDateTime selectedDateTime,
+                              WeatherResponse weatherResponse,
                               MarineResponse marineResponse,
                               FishingConditionsCallback callback) {
         Call<TideResponse> tideCall = tideApiService.getTides(
-                28.12,
-                -16.73
+                spot.getLatitude(),
+                spot.getLongitude()
         );
 
         tideCall.enqueue(new Callback<TideResponse>() {
@@ -113,7 +133,12 @@ public class FishingConditionsRepository {
 
                     TideInfo tideInfo = buildTideInfo(tideResponse.getExtremes());
 
-                    buildFishingConditions(weatherResponse, marineResponse, tideInfo, callback);
+                    buildFishingConditions(
+                            weatherResponse,
+                            marineResponse,
+                            tideInfo,
+                            selectedDateTime,
+                            callback);
                 } else {
                     callback.onError("Tide response error: " + response.code());
                 }
@@ -153,17 +178,28 @@ public class FishingConditionsRepository {
     private void buildFishingConditions(WeatherResponse weatherResponse,
                                         MarineResponse marineResponse,
                                         TideInfo tideInfo,
+                                        LocalDateTime selectedDateTime,
                                         FishingConditionsCallback callback) {
 
-        MoonPhase moonPhase = MoonPhaseCalculator.calculateMoonPhase(LocalDate.now());
+        MoonPhase moonPhase = MoonPhaseCalculator.calculateMoonPhase(selectedDateTime.toLocalDate());
+
+        int weatherIndex = findHourlyIndex(
+                weatherResponse.getHourly().getTime(),
+                selectedDateTime
+        );
+
+        int marineIndex = findHourlyIndex(
+                marineResponse.getHourly().getTime(),
+                selectedDateTime
+        );
 
         FishingConditionsData fishingConditionsData = new FishingConditionsData(
-                weatherResponse.getHourly().getTemperature2m().get(0),
-                weatherResponse.getHourly().getWindSpeed10m().get(0),
+                weatherResponse.getHourly().getTemperature2m().get(weatherIndex),
+                weatherResponse.getHourly().getWindSpeed10m().get(weatherIndex),
                 weatherResponse.getDaily().getSunrise().get(0),
                 weatherResponse.getDaily().getSunset().get(0),
-                marineResponse.getHourly().getWaveHeight().get(0),
-                marineResponse.getHourly().getWavePeriod().get(0),
+                marineResponse.getHourly().getWaveHeight().get(marineIndex),
+                marineResponse.getHourly().getWavePeriod().get(marineIndex),
                 moonPhase,
                 tideInfo
         );
@@ -175,5 +211,21 @@ public class FishingConditionsRepository {
         void onSuccess(FishingConditionsData fishingConditionsData);
 
         void onError(String errorMessage);
+    }
+
+    private int findHourlyIndex(List<String> times, LocalDateTime selectedDateTime) {
+        String targetTime = selectedDateTime
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0)
+                .toString();
+
+        int index = times.indexOf(targetTime);
+
+        if (index != -1) {
+            return index;
+        }
+
+        return 0;
     }
 }

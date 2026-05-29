@@ -16,6 +16,8 @@ public interface WeatherApiService {
             @Query("longitude") double longitude,
             @Query("hourly") String hourly,
             @Query("daily") String daily,
-            @Query("timezone") String timezone
+            @Query("timezone") String timezone,
+            @Query("start_date") String startDate,
+            @Query("end_date") String endDate
     );
 }

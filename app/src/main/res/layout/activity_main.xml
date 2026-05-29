@@ -18,6 +18,53 @@
             android:textStyle="bold"
             android:layout_marginBottom="24dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Spot"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinnerSpot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btnLoadConditions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Load Conditions"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:id="@+id/tvSelectedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selected date: Today"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/tvSelectedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selected time: Now"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnSelectTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Time"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/btnSelectDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Date"
+            android:layout_marginBottom="24dp"/>
+
         <!-- Weather -->
 
         <TextView

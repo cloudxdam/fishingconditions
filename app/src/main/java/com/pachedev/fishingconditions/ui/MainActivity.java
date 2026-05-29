@@ -1,6 +1,11 @@
 package com.pachedev.fishingconditions.ui;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -9,7 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.pachedev.fishingconditions.R;
 import com.pachedev.fishingconditions.data.repository.FishingConditionsRepository;
 import com.pachedev.fishingconditions.model.domain.FishingConditionsData;
+import com.pachedev.fishingconditions.model.domain.FishingSpot;
 import com.pachedev.fishingconditions.utils.DisplayFormatter;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +35,19 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvHighTide;
     private TextView tvLowTide;
     private FishingConditionsRepository fishingConditionsRepository;
+
+    private List<FishingSpot> fishingSpots;
+
+    private Spinner spinnerSpot;
+    private Button btnLoadConditions;
+
+    private Button btnSelectDate;
+
+    private TextView tvSelectedDate;
+
+    private LocalDateTime selectedDateTime = LocalDateTime.now();
+    private Button btnSelectTime;
+    private TextView tvSelectedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,26 +64,70 @@ public class MainActivity extends AppCompatActivity {
         tvMoonPhase = findViewById(R.id.tvMoonPhase);
         tvHighTide = findViewById(R.id.tvHighTide);
         tvLowTide = findViewById(R.id.tvLowTide);
+        spinnerSpot = findViewById(R.id.spinnerSpot);
+        btnLoadConditions = findViewById(R.id.btnLoadConditions);
+        btnSelectDate = findViewById(R.id.btnSelectDate);
+        tvSelectedDate = findViewById(R.id.tvSelectedDate);
+        btnSelectTime = findViewById(R.id.btnSelectTime);
+        tvSelectedTime = findViewById(R.id.tvSelectedTime);
+
+        btnSelectTime.setOnClickListener(v -> showTimePicker());
+
+        setupFishingSpots();
+
+        btnLoadConditions.setOnClickListener(v -> loadFishingConditions());
+        btnSelectDate.setOnClickListener(v -> showDatePicker());
 
         fishingConditionsRepository = new FishingConditionsRepository();
 
         loadFishingConditions();
     }
 
+    private void showTimePicker() {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                this,
+                (view, hourOfDay, minute) -> {
+                    selectedDateTime = selectedDateTime
+                            .withHour(hourOfDay)
+                            .withMinute(0)
+                            .withSecond(0)
+                            .withNano(0);
+
+                    tvSelectedTime.setText(
+                            String.format(
+                                    Locale.getDefault(),
+                                    "Selected time: %02d:00",
+                                    hourOfDay)
+                    );
+                },
+                selectedDateTime.getHour(),
+                0,
+                true
+        );
+
+        timePickerDialog.show();
+    }
+
     private void loadFishingConditions() {
         setLoadingState();
 
-        fishingConditionsRepository.getFishingConditions(new FishingConditionsRepository.FishingConditionsCallback() {
-            @Override
-            public void onSuccess(FishingConditionsData fishingConditionsData) {
-                showFishingConditions(fishingConditionsData);
-            }
+        FishingSpot selectedSpot = (FishingSpot) spinnerSpot.getSelectedItem();
 
-            @Override
-            public void onError(String errorMessage) {
-                showError(errorMessage);
-            }
-        });
+        fishingConditionsRepository.getFishingConditions(
+                selectedSpot,
+                selectedDateTime,
+                new FishingConditionsRepository.FishingConditionsCallback() {
+                    @Override
+                    public void onSuccess(FishingConditionsData fishingConditionsData) {
+                        showFishingConditions(fishingConditionsData);
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        showError(errorMessage);
+                    }
+                }
+        );
     }
 
     private void setLoadingState() {
@@ -91,35 +159,77 @@ public class MainActivity extends AppCompatActivity {
                 data.getTideInfo().getNextLowTideHeight(), "m"
         );
 
-        tvTemperature.setText("Temperature: " +
-                DisplayFormatter.formatDecimal(data.getTemperature(), "°C"));
+        tvTemperature.setText(String.format("Temperature: %s", DisplayFormatter.formatDecimal(data.getTemperature(), "°C")));
 
-        tvWind.setText("Wind: " +
-                DisplayFormatter.formatDecimal(data.getWindSpeed(), "km/h"));
+        tvWind.setText(String.format("Wind: %s", DisplayFormatter.formatDecimal(data.getWindSpeed(), "km/h")));
 
-        tvSunrise.setText("Sunrise: " +
-                DisplayFormatter.formatTime(data.getSunrise()));
+        tvSunrise.setText(String.format("Sunrise: %s", DisplayFormatter.formatTime(data.getSunrise())));
 
-        tvSunset.setText("Sunset: " +
-                DisplayFormatter.formatTime(data.getSunset()));
+        tvSunset.setText(String.format("Sunset: %s", DisplayFormatter.formatTime(data.getSunset())));
 
-        tvWaveHeight.setText("Wave height: " +
-                DisplayFormatter.formatDecimal(data.getWaveHeight(), "m"));
+        tvWaveHeight.setText(String.format("Wave height: %s", DisplayFormatter.formatDecimal(data.getWaveHeight(), "m")));
 
-        tvWavePeriod.setText("Wave period: " +
-                DisplayFormatter.formatDecimal(data.getWavePeriod(), "s"));
+        tvWavePeriod.setText(String.format("Wave period: %s", DisplayFormatter.formatDecimal(data.getWavePeriod(), "s")));
 
-        tvMoonPhase.setText("Moon phase: " +
-                DisplayFormatter.formatMoonPhase(data.getMoonPhase()));
+        tvMoonPhase.setText(String.format("Moon phase: %s", DisplayFormatter.formatMoonPhase(data.getMoonPhase())));
 
-        tvHighTide.setText("Next high tide: " +
-                highTideTime + " (" + highTideHeight + ")");
+        tvHighTide.setText(String.format("Next high tide: %s (%s)", highTideTime, highTideHeight));
 
-        tvLowTide.setText("Next low tide: " +
-                lowTideTime + " (" + lowTideHeight + ")");
+        tvLowTide.setText(String.format("Next low tide: %s (%s)", lowTideTime, lowTideHeight));
     }
 
     private void showError(String errorMessage) {
-        tvTemperature.setText("Error: " + errorMessage);
+        tvTemperature.setText(String.format("Error: %s", errorMessage));
+    }
+
+    private void setupFishingSpots() {
+        fishingSpots = Arrays.asList(
+                new FishingSpot("Palm Mar", 28.0244, -16.6417),
+                new FishingSpot("Alcalá", 28.2086, -16.8404),
+                new FishingSpot("Abades", 28.1403, -16.4325),
+                new FishingSpot("El Médano", 28.0453, -16.5361),
+                new FishingSpot("Las Galletas", 28.0064, -16.6538),
+                new FishingSpot("La Caleta", 28.0931, -16.7552),
+                new FishingSpot("Los Cristianos", 28.0506, -16.7200)
+        );
+
+        ArrayAdapter<FishingSpot> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                fishingSpots
+        );
+
+        adapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+        );
+
+        spinnerSpot.setAdapter(adapter);
+    }
+
+    private void showDatePicker() {
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, year, month, dayOfMonth) -> {
+
+                    selectedDateTime = LocalDateTime.of(
+                            year,
+                            month + 1,
+                            dayOfMonth,
+                            selectedDateTime.getHour(),
+                            selectedDateTime.getMinute()
+                    );
+
+                    tvSelectedDate.setText(
+                            String.format("Selected date: %s", selectedDateTime.toLocalDate())
+                    );
+
+                },
+                selectedDateTime.getYear(),
+                selectedDateTime.getMonthValue() - 1,
+                selectedDateTime.getDayOfMonth()
+        );
+
+        datePickerDialog.show();
     }
 }
