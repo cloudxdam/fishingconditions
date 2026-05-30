@@ -1,14 +1,13 @@
-package com.pachedev.fishingconditions.model.tides;
+package com.pachedev.fishingconditions.model.tidecheck;
 
 import com.google.gson.annotations.SerializedName;
-import com.pachedev.fishingconditions.model.tidecheck.TideCheckExtreme;
 
 import java.util.List;
 
 /**
  * Tide forecast response from TideCheck API.
  */
-public class TideResponse {
+public class TideCheckResponse {
 
     @SerializedName("extremes")
     private List<TideCheckExtreme> extremes;

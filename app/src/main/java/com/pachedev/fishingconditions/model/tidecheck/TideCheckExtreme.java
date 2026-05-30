@@ -1,11 +1,11 @@
-package com.pachedev.fishingconditions.model.tides;
+package com.pachedev.fishingconditions.model.tidecheck;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Tide extreme data from TideCheck API.
  */
-public class TideExtreme {
+public class TideCheckExtreme {
 
     @SerializedName("time")
     private String time;
