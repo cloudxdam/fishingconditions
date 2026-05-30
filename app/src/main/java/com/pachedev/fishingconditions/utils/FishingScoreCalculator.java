@@ -106,6 +106,10 @@ public class FishingScoreCalculator {
     private static int calculateTideScore(TideInfo tideInfo,
                                           LocalDateTime selectedDateTime) {
 
+        if (tideInfo == null || tideInfo.getNextHighTideTime() == null) {
+            return 5;
+        }
+
         OffsetDateTime nextHighTide = OffsetDateTime.parse(
                 tideInfo.getNextHighTideTime()
         );

@@ -32,6 +32,14 @@ android {
             "\"$mareaApiKey\""
             )
 
+        val tideCheckApiKey = localProperties.getProperty("TIDECHECK_API_KEY") ?: ""
+
+        buildConfigField(
+            "String",
+            "TIDECHECK_API_KEY",
+            "\"$tideCheckApiKey\""
+        )
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

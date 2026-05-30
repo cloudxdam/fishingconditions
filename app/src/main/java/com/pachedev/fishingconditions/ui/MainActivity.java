@@ -84,8 +84,6 @@ public class MainActivity extends AppCompatActivity {
         btnSelectDate.setOnClickListener(v -> showDatePicker());
 
         fishingConditionsRepository = new FishingConditionsRepository();
-
-        loadFishingConditions();
     }
 
     private void showTimePicker() {
@@ -157,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
      * @param data fishing conditions data
      */
     private void showFishingConditions(FishingConditionsData data) {
-        String highTideTime = DisplayFormatter.formatTime(
+        String highTideTime = DisplayFormatter.formatDateTime(
                 data.getTideInfo().getNextHighTideTime()
         );
 
@@ -165,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 data.getTideInfo().getNextHighTideHeight(), "m"
         );
 
-        String lowTideTime = DisplayFormatter.formatTime(
+        String lowTideTime = DisplayFormatter.formatDateTime(
                 data.getTideInfo().getNextLowTideTime()
         );
 

@@ -2,9 +2,9 @@ package com.pachedev.fishingconditions.utils;
 
 import com.pachedev.fishingconditions.model.domain.MoonPhase;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -13,6 +13,8 @@ import java.time.format.DateTimeFormatter;
 public class DisplayFormatter {
 
     private static final DateTimeFormatter OUTPUT_TIME = DateTimeFormatter.ofPattern("HH:mm");
+    private static final DateTimeFormatter OUTPUT_DATE_TIME =
+            DateTimeFormatter.ofPattern("dd/MM HH:mm");
 
 private DisplayFormatter () {
     // Prevent instantiation
@@ -32,9 +34,14 @@ private DisplayFormatter () {
         try {
             LocalDateTime parsedDateTime = LocalDateTime.parse(dateTime);
             return parsedDateTime.format(OUTPUT_TIME);
+
         } catch (Exception e) {
+
             OffsetDateTime parsedDateTime = OffsetDateTime.parse(dateTime);
-            return parsedDateTime.format(OUTPUT_TIME);
+
+            return parsedDateTime
+                    .atZoneSameInstant(ZoneId.of("Atlantic/Canary"))
+                    .format(OUTPUT_TIME);
         }
     }
 
@@ -110,6 +117,24 @@ public static String formatMoonPhase(MoonPhase moonPhase) {
             return "Fair Conditions";
         } else {
             return "Poor Conditions";
+        }
+    }
+
+    public static String formatDateTime(String dateTime) {
+        if (dateTime == null || dateTime.isEmpty()) {
+            return "N/A";
+        }
+
+        try {
+            LocalDateTime parsedDateTime = LocalDateTime.parse(dateTime);
+            return parsedDateTime.format(OUTPUT_DATE_TIME);
+
+        } catch (Exception e) {
+            OffsetDateTime parsedDateTime = OffsetDateTime.parse(dateTime);
+
+            return parsedDateTime
+                    .atZoneSameInstant(ZoneId.of("Atlantic/Canary"))
+                    .format(OUTPUT_DATE_TIME);
         }
     }
 }
