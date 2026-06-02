@@ -16,13 +16,17 @@ import com.pachedev.fishingconditions.data.repository.FishingConditionsRepositor
 import com.pachedev.fishingconditions.model.domain.FishingConditionsData;
 import com.pachedev.fishingconditions.model.domain.FishingSpot;
 import com.pachedev.fishingconditions.utils.DisplayFormatter;
+import com.pachedev.fishingconditions.data.local.FishingSpotProvider;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-
+/**
+ * Main screen of the application.
+ * Allows the user to select a fishing spot, date and time,
+ * then displays weather, sea, tide and fishing score information.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private TextView tvTemperature;
@@ -34,24 +38,20 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvMoonPhase;
     private TextView tvHighTide;
     private TextView tvLowTide;
-    private FishingConditionsRepository fishingConditionsRepository;
-
-    private List<FishingSpot> fishingSpots;
-
-    private Spinner spinnerSpot;
-    private Button btnLoadConditions;
-
-    private Button btnSelectDate;
-
     private TextView tvSelectedDate;
-
-    private LocalDateTime selectedDateTime = LocalDateTime.now();
-    private Button btnSelectTime;
     private TextView tvSelectedTime;
     private TextView tvFishingScore;
-
     private TextView tvFishingScoreDescription;
+    private FishingConditionsRepository fishingConditionsRepository;
+    private Spinner spinnerSpot;
+    private LocalDateTime selectedDateTime = LocalDateTime.now();
 
+
+    /**
+     * Initializes the user interface and event listeners.
+     *
+     * @param savedInstanceState previously saved activity state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
         tvHighTide = findViewById(R.id.tvHighTide);
         tvLowTide = findViewById(R.id.tvLowTide);
         spinnerSpot = findViewById(R.id.spinnerSpot);
-        btnLoadConditions = findViewById(R.id.btnLoadConditions);
-        btnSelectDate = findViewById(R.id.btnSelectDate);
+        Button btnLoadConditions = findViewById(R.id.btnLoadConditions);
+        Button btnSelectDate = findViewById(R.id.btnSelectDate);
         tvSelectedDate = findViewById(R.id.tvSelectedDate);
-        btnSelectTime = findViewById(R.id.btnSelectTime);
+        Button btnSelectTime = findViewById(R.id.btnSelectTime);
         tvSelectedTime = findViewById(R.id.tvSelectedTime);
         tvFishingScore = findViewById(R.id.tvFishingScore);
         tvFishingScoreDescription = findViewById(R.id.tvFishingScoreDescription);
@@ -86,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
         fishingConditionsRepository = new FishingConditionsRepository(this);
     }
 
+    /**
+     * Displays a time picker dialog and updates the selected time.
+     */
     private void showTimePicker() {
         TimePickerDialog timePickerDialog = new TimePickerDialog(
                 this,
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     tvSelectedTime.setText(
                             String.format(
                                     Locale.getDefault(),
-                                    "Selected time: %02d:00",
+                                    getString(R.string.selected_time_02d_00),
                                     hourOfDay)
                     );
                 },
@@ -112,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Loads fishing conditions for the selected spot and date.
+     * Requests fishing conditions for the selected spot, date and time.
      */
     private void loadFishingConditions() {
         setLoadingState();
@@ -136,8 +139,11 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    /**
+     * Updates the UI to indicate that data is being loaded.
+     */
     private void setLoadingState() {
-        tvTemperature.setText("Loading...");
+        tvTemperature.setText(R.string.loading);
         tvWind.setText("");
         tvSunrise.setText("");
         tvSunset.setText("");
@@ -150,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Displays fishing conditions in the UI.
+     * Displays the retrieved fishing conditions in the user interface.
      *
      * @param data fishing conditions data
      */
@@ -171,38 +177,36 @@ public class MainActivity extends AppCompatActivity {
                 data.getTideInfo().getNextLowTideHeight(), "m"
         );
 
-        tvTemperature.setText(String.format("Temperature: %s", DisplayFormatter.formatDecimal(data.getTemperature(), "°C")));
+        tvTemperature.setText(String.format(getString(R.string.temperature_s), DisplayFormatter.formatDecimal(data.getTemperature(), "°C")));
 
         tvWind.setText(
                 String.format(
                         Locale.getDefault(),
-                        "Wind: %s - %s",
+                        getString(R.string.wind_s_s),
                         DisplayFormatter.formatWindDirection(data.getWindDirection()),
                         DisplayFormatter.formatDecimal(data.getWindSpeed(), "km/h")
                 )
         );
 
-        tvSunrise.setText(String.format("Sunrise: %s", DisplayFormatter.formatTime(data.getSunrise())));
+        tvSunrise.setText(String.format(getString(R.string.sunrise_s), DisplayFormatter.formatTime(data.getSunrise())));
 
-        tvSunset.setText(String.format("Sunset: %s", DisplayFormatter.formatTime(data.getSunset())));
+        tvSunset.setText(String.format(getString(R.string.sunset_s), DisplayFormatter.formatTime(data.getSunset())));
 
-        tvWaveHeight.setText(String.format("Wave height: %s", DisplayFormatter.formatDecimal(data.getWaveHeight(), "m")));
+        tvWaveHeight.setText(String.format(getString(R.string.wave_height_s), DisplayFormatter.formatDecimal(data.getWaveHeight(), "m")));
 
-        tvWavePeriod.setText(String.format("Wave period: %s", DisplayFormatter.formatDecimal(data.getWavePeriod(), "s")));
+        tvWavePeriod.setText(String.format(getString(R.string.wave_period_s), DisplayFormatter.formatDecimal(data.getWavePeriod(), "s")));
 
-        tvMoonPhase.setText(String.format("Moon phase: %s", DisplayFormatter.formatMoonPhase(data.getMoonPhase())));
+        tvMoonPhase.setText(getString(R.string.moon_phase_s,getString(DisplayFormatter.getMoonPhaseStringRes(data.getMoonPhase()))));
 
-        tvHighTide.setText(String.format("Next high tide: %s (%s)", highTideTime, highTideHeight));
+        tvHighTide.setText(String.format(getString(R.string.next_high_tide_s_s), highTideTime, highTideHeight));
 
-        tvLowTide.setText(String.format("Next low tide: %s (%s)", lowTideTime, lowTideHeight));
+        tvLowTide.setText(String.format(getString(R.string.next_low_tide_s_s), lowTideTime, lowTideHeight));
 
-        tvFishingScore.setText(String.format(Locale.getDefault(),"Fishing Score: %d / 100",data.getFishingScore()));
+        tvFishingScore.setText(String.format(Locale.getDefault(),getString(R.string.fishing_score_d_100),data.getFishingScore()));
 
         int score = data.getFishingScore();
 
-        tvFishingScoreDescription.setText(
-                DisplayFormatter.formatFishingScoreDescription(score)
-        );
+        tvFishingScoreDescription.setText(DisplayFormatter.getFishingScoreDescriptionRes(score));
 
         if (score >= 80) {
             tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_green_dark));
@@ -215,23 +219,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Displays an error message in the UI.
+     *
+     * @param errorMessage error message to display
+     */
     private void showError(String errorMessage) {
-        tvTemperature.setText(String.format("Error: %s", errorMessage));
+        tvTemperature.setText(String.format(getString(R.string.error_s), errorMessage));
     }
 
     /**
      * Initializes the available fishing spots.
      */
     private void setupFishingSpots() {
-        fishingSpots = Arrays.asList(
-                new FishingSpot("Palm Mar", 28.0244, -16.6417),
-                new FishingSpot("Alcalá", 28.2086, -16.8404),
-                new FishingSpot("Abades", 28.1403, -16.4325),
-                new FishingSpot("El Médano", 28.0453, -16.5361),
-                new FishingSpot("Las Galletas", 28.0064, -16.6538),
-                new FishingSpot("La Caleta", 28.0931, -16.7552),
-                new FishingSpot("Los Cristianos", 28.0506, -16.7200)
-        );
+        List<FishingSpot> fishingSpots = FishingSpotProvider.getDefaultSpots();
 
         ArrayAdapter<FishingSpot> adapter = new ArrayAdapter<>(
                 this,
@@ -246,6 +247,9 @@ public class MainActivity extends AppCompatActivity {
         spinnerSpot.setAdapter(adapter);
     }
 
+    /**
+     * Displays a date picker dialog and updates the selected date.
+     */
     private void showDatePicker() {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -261,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                     );
 
                     tvSelectedDate.setText(
-                            String.format("Selected date: %s", selectedDateTime.toLocalDate())
+                            String.format(getString(R.string.selected_date_s), selectedDateTime.toLocalDate())
                     );
 
                 },

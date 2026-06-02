@@ -6,6 +6,7 @@ import com.pachedev.fishingconditions.model.domain.TideInfo;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 
 /**
@@ -13,6 +14,8 @@ import java.time.ZoneOffset;
  * sea, tide and moon conditions.
  */
 public class FishingScoreCalculator {
+
+    private static final ZoneId CANARY_TIME_ZONE = ZoneId.of("Atlantic/Canary");
 
     private FishingScoreCalculator() {
         // Prevent instantiation
@@ -26,7 +29,7 @@ public class FishingScoreCalculator {
      * @param wavePeriod wave period in seconds
      * @param moonPhase moon phase
      * @param tideInfo tide information
-     * @param selectedDateTime selected date and time
+     * @param selectedDateTime selected date and time in Canary local time
      * @return fishing score from 0 to 100
      */
     public static int calculateScore(
@@ -110,16 +113,18 @@ public class FishingScoreCalculator {
             return 5;
         }
 
-        OffsetDateTime nextHighTide = OffsetDateTime.parse(
+        OffsetDateTime nextHighTideUtc = OffsetDateTime.parse(
                 tideInfo.getNextHighTideTime()
         );
 
         OffsetDateTime selectedDateTimeUtc = selectedDateTime
-                .atOffset(ZoneOffset.UTC);
+                .atZone(CANARY_TIME_ZONE)
+                .toOffsetDateTime()
+                .withOffsetSameInstant(ZoneOffset.UTC);
 
         long hoursUntilHighTide = Duration.between(
                 selectedDateTimeUtc,
-                nextHighTide
+                nextHighTideUtc
         ).toHours();
 
         if (hoursUntilHighTide >= 0 && hoursUntilHighTide <= 2) {
