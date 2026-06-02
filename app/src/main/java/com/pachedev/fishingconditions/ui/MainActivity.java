@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         btnLoadConditions.setOnClickListener(v -> loadFishingConditions());
         btnSelectDate.setOnClickListener(v -> showDatePicker());
 
-        fishingConditionsRepository = new FishingConditionsRepository();
+        fishingConditionsRepository = new FishingConditionsRepository(this);
     }
 
     private void showTimePicker() {
