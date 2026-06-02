@@ -36,6 +36,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Repository responsible for loading and combining fishing condition data.
+ *
+ * It retrieves weather, marine and tide information from remote APIs, caches tide
+ * data locally with Room, and builds a single FishingConditionsData object for the UI.
+ */
 public class FishingConditionsRepository {
 
     private final WeatherApiService weatherApiService;
@@ -45,6 +51,11 @@ public class FishingConditionsRepository {
     private final ExecutorService databaseExecutor;
     private final Handler mainHandler;
 
+    /**
+     * Creates a repository instance and initializes API services and local cache access.
+     *
+     * @param context application context used to access the Room database
+     */
     public FishingConditionsRepository(Context context) {
         weatherApiService = WeatherRetrofitInstance
                 .getRetrofitInstance()
@@ -66,6 +77,13 @@ public class FishingConditionsRepository {
         mainHandler = new Handler(Looper.getMainLooper());
     }
 
+    /**
+     * Retrieves fishing conditions for the selected spot and date-time.
+     *
+     * @param spot selected fishing spot
+     * @param selectedDateTime selected date and time
+     * @param callback callback used to return the result or an error
+     */
     public void getFishingConditions(FishingSpot spot,
                                      LocalDateTime selectedDateTime,
                                      FishingConditionsCallback callback) {
@@ -104,6 +122,14 @@ public class FishingConditionsRepository {
         });
     }
 
+    /**
+     * Loads marine data after weather data has been retrieved successfully.
+     *
+     * @param spot selected fishing spot
+     * @param selectedDateTime selected date and time
+     * @param weatherResponse weather API response
+     * @param callback callback used to return the final result
+     */
     private void loadMarineData(FishingSpot spot,
                                 LocalDateTime selectedDateTime,
                                 WeatherResponse weatherResponse,
@@ -143,6 +169,18 @@ public class FishingConditionsRepository {
         });
     }
 
+    /**
+     * Loads tide data using a cache-first strategy.
+     *
+     * If tide data for the selected spot and date exists in Room, it is reused.
+     * Otherwise, the data is requested from TideCheck.
+     *
+     * @param spot selected fishing spot
+     * @param selectedDateTime selected date and time
+     * @param weatherResponse weather API response
+     * @param marineResponse marine API response
+     * @param callback callback used to return the final result
+     */
     private void loadTideData(FishingSpot spot,
                               LocalDateTime selectedDateTime,
                               WeatherResponse weatherResponse,
@@ -184,6 +222,15 @@ public class FishingConditionsRepository {
         });
     }
 
+    /**
+     * Requests tide data from TideCheck when no cached data is available.
+     *
+     * @param spot selected fishing spot
+     * @param selectedDateTime selected date and time
+     * @param weatherResponse weather API response
+     * @param marineResponse marine API response
+     * @param callback callback used to return the final result
+     */
     private void loadTideDataFromApi(FishingSpot spot,
                                      LocalDateTime selectedDateTime,
                                      WeatherResponse weatherResponse,
@@ -228,6 +275,16 @@ public class FishingConditionsRepository {
         });
     }
 
+    /**
+     * Loads tide forecast data for the nearest TideCheck station.
+     *
+     * @param spot selected fishing spot
+     * @param stationId TideCheck station identifier
+     * @param selectedDateTime selected date and time
+     * @param weatherResponse weather API response
+     * @param marineResponse marine API response
+     * @param callback callback used to return the final result
+     */
     private void loadTideForecast(FishingSpot spot,
                                   String stationId,
                                   LocalDateTime selectedDateTime,
@@ -278,6 +335,13 @@ public class FishingConditionsRepository {
         });
     }
 
+    /**
+     * Saves tide information in the local Room cache.
+     *
+     * @param spot selected fishing spot
+     * @param selectedDate selected date
+     * @param tideInfo tide information to cache
+     */
     private void saveTideCache(FishingSpot spot,
                                String selectedDate,
                                TideInfo tideInfo) {
@@ -296,6 +360,15 @@ public class FishingConditionsRepository {
         });
     }
 
+    /**
+     * Converts TideCheck tide extremes into the app domain tide model.
+     *
+     * It selects the next high tide and next low tide after the selected date-time.
+     *
+     * @param extremes TideCheck tide extremes
+     * @param selectedDateTime selected date and time
+     * @return tide information used by the app
+     */
     private TideInfo buildTideInfo(List<TideCheckExtreme> extremes,
                                    LocalDateTime selectedDateTime) {
         TideCheckExtreme nextHighTide = null;
@@ -330,6 +403,15 @@ public class FishingConditionsRepository {
         );
     }
 
+    /**
+     * Builds the final fishing conditions object from weather, marine, tide and moon data.
+     *
+     * @param weatherResponse weather API response
+     * @param marineResponse marine API response
+     * @param tideInfo tide information
+     * @param selectedDateTime selected date and time
+     * @param callback callback used to return the result
+     */
     private void buildFishingConditions(WeatherResponse weatherResponse,
                                         MarineResponse marineResponse,
                                         TideInfo tideInfo,
@@ -340,15 +422,23 @@ public class FishingConditionsRepository {
                 selectedDateTime.toLocalDate()
         );
 
-        int weatherIndex = findHourlyIndex(
-                weatherResponse.getHourly().getTime(),
-                selectedDateTime
-        );
+        int weatherIndex;
+        int marineIndex;
 
-        int marineIndex = findHourlyIndex(
-                marineResponse.getHourly().getTime(),
-                selectedDateTime
-        );
+        try {
+            weatherIndex = findHourlyIndex(
+                    weatherResponse.getHourly().getTime(),
+                    selectedDateTime
+            );
+
+            marineIndex = findHourlyIndex(
+                    marineResponse.getHourly().getTime(),
+                    selectedDateTime
+            );
+        } catch (IllegalArgumentException e) {
+            callback.onError(e.getMessage());
+            return;
+        }
 
         Double temperature = weatherResponse.getHourly().getTemperature2m().get(weatherIndex);
         Double windSpeed = weatherResponse.getHourly().getWindSpeed10m().get(weatherIndex);
@@ -381,6 +471,17 @@ public class FishingConditionsRepository {
         callback.onSuccess(fishingConditionsData);
     }
 
+    /**
+     * Finds the index of the hourly data matching the selected date and time.
+     *
+     * The selected date-time is rounded to the start of the hour before
+     * searching for an exact match in the API response timestamps.
+     *
+     * @param times list of hourly timestamps returned by the API
+     * @param selectedDateTime selected date and time
+     * @return index of the matching hourly data
+     * @throws IllegalArgumentException if no matching timestamp is found
+     */
     private int findHourlyIndex(List<String> times, LocalDateTime selectedDateTime) {
         String targetTime = selectedDateTime
                 .withMinute(0)
@@ -390,13 +491,18 @@ public class FishingConditionsRepository {
 
         int index = times.indexOf(targetTime);
 
-        if (index != -1) {
-            return index;
+        if (index == -1) {
+            throw new IllegalArgumentException(
+                    "No hourly data found for selected time: " + targetTime
+            );
         }
 
-        return 0;
+        return index;
     }
 
+    /**
+     * Callback used to return fishing conditions or an error message.
+     */
     public interface FishingConditionsCallback {
         void onSuccess(FishingConditionsData fishingConditionsData);
 

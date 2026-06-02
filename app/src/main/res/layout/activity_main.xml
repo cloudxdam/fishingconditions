@@ -41,7 +41,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Location &amp; Search"
+                    android:text="@string/location_amp_search"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="12dp" />
@@ -49,7 +49,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Selected Spot"
+                    android:text="@string/selected_spot"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -62,14 +62,14 @@
                     android:id="@+id/tvSelectedDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Selected date: Today"
+                    android:text="@string/selected_date_today"
                     android:layout_marginBottom="8dp" />
 
                 <Button
                     android:id="@+id/btnSelectDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Select Date"
+                    android:text="@string/select_date"
                     android:backgroundTint="#1976D2"
                     android:layout_marginBottom="12dp" />
 
@@ -77,14 +77,14 @@
                     android:id="@+id/tvSelectedTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Selected time: Now"
+                    android:text="@string/selected_time_now"
                     android:layout_marginBottom="8dp" />
 
                 <Button
                     android:id="@+id/btnSelectTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Select Time"
+                    android:text="@string/select_time"
                     android:backgroundTint="#1976D2"
                     android:layout_marginBottom="12dp" />
 
@@ -93,7 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#2E7D32"
-                    android:text="Load Conditions" />
+                    android:text="@string/load_conditions" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -114,7 +114,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fishing Score"
+                    android:text="@string/fishing_score"
                     android:textStyle="bold"/>
 
                 <TextView
@@ -156,7 +156,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Weather"
+                    android:text="@string/weather"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="8dp" />
@@ -205,7 +205,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sea Conditions"
+                    android:text="@string/sea_conditions"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="8dp" />
@@ -244,7 +244,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tides"
+                    android:text="@string/tides"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="8dp" />
@@ -283,7 +283,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Moon Phase"
+                    android:text="@string/moon_phase"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="8dp" />

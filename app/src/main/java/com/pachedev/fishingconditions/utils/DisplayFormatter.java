@@ -1,5 +1,6 @@
 package com.pachedev.fishingconditions.utils;
 
+import com.pachedev.fishingconditions.R;
 import com.pachedev.fishingconditions.model.domain.MoonPhase;
 
 import java.time.LocalDateTime;
@@ -51,18 +52,36 @@ private DisplayFormatter () {
      * @param moonPhase moon phase
      * @return formatted moon phase name
      */
-public static String formatMoonPhase(MoonPhase moonPhase) {
-    String[] words = moonPhase.name().toLowerCase().split("_");
-    StringBuilder formatted = new StringBuilder();
+    public static int getMoonPhaseStringRes(MoonPhase moonPhase) {
+        switch (moonPhase) {
+            case NEW_MOON:
+                return R.string.new_moon;
 
-    for (String word : words ) {
-        formatted.append(Character.toUpperCase(word.charAt(0)))
-                .append(word.substring(1))
-                .append(" ");
+            case WAXING_CRESCENT:
+                return R.string.waxing_crescent;
+
+            case FIRST_QUARTER:
+                return R.string.first_quarter;
+
+            case WAXING_GIBBOUS:
+                return R.string.waxing_gibbous;
+
+            case FULL_MOON:
+                return R.string.full_moon;
+
+            case WANING_GIBBOUS:
+                return R.string.waning_gibbous;
+
+            case LAST_QUARTER:
+                return R.string.last_quarter;
+
+            case WANING_CRESCENT:
+                return R.string.waning_crescent;
+
+            default:
+                return R.string.new_moon;
+        }
     }
-
-    return formatted.toString().trim();
-}
 
     /**
      * Formats a decimal value with its unit.
@@ -108,15 +127,15 @@ public static String formatMoonPhase(MoonPhase moonPhase) {
      * @param score fishing score
      * @return condition label
      */
-    public static String formatFishingScoreDescription(int score) {
+    public static int getFishingScoreDescriptionRes(int score) {
         if (score >= 80) {
-            return "Excellent Conditions";
+            return R.string.excellent_conditions;
         } else if (score >= 60) {
-            return "Good Conditions";
+            return R.string.good_conditions;
         } else if (score >= 40) {
-            return "Fair Conditions";
+            return R.string.fair_conditions;
         } else {
-            return "Poor Conditions";
+            return R.string.poor_conditions;
         }
     }
 
