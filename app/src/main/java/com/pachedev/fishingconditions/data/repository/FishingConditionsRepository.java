@@ -446,6 +446,12 @@ public class FishingConditionsRepository {
         Double wavePeriod = marineResponse.getHourly().getWavePeriod().get(marineIndex);
         Double windDirection = weatherResponse.getHourly().getWindDirection10m().get(weatherIndex);
 
+        if (temperature == null || windSpeed == null || waveHeight == null
+                || wavePeriod == null || windDirection == null) {
+            callback.onError("Incomplete data for selected time");
+            return;
+        }
+        
         int fishingScore = FishingScoreCalculator.calculateScore(
                 windSpeed,
                 waveHeight,

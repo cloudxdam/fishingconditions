@@ -24,6 +24,14 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        val mareaApiKey = localProperties.getProperty("MAREA_API_KEY") ?: ""
+
+        buildConfigField(
+            "String",
+            "MAREA_API_KEY",
+            "\"$mareaApiKey\""
+            )
+
         val tideCheckApiKey = localProperties.getProperty("TIDECHECK_API_KEY") ?: ""
 
         buildConfigField(
