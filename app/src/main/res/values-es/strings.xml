@@ -38,4 +38,11 @@
     <string name="waning_gibbous">Gibosa menguante</string>
     <string name="last_quarter">Cuarto menguante</string>
     <string name="waning_crescent">Luna menguante</string>
+    <string name="swipe_for_more_details">Desliza para más detalles</string>
+    <string name="thermostat">Termostato</string>
+    <string name="wind">Viento</string>
+    <string name="down_arrow">↓</string>
+    <string name="sunrise">Amanecer</string>
+    <string name="sunset">Atardecer</string>
+    <string name="calculating">Calculando…</string>
 </resources>

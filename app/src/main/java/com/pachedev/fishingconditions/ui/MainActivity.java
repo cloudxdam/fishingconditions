@@ -147,12 +147,12 @@ public class MainActivity extends AppCompatActivity {
         tvWind.setText("");
         tvSunrise.setText("");
         tvSunset.setText("");
-        tvWaveHeight.setText("");
+        tvWaveHeight.setText(R.string.loading);
         tvWavePeriod.setText("");
-        tvMoonPhase.setText("");
-        tvHighTide.setText("");
+        tvMoonPhase.setText(R.string.loading);
+        tvHighTide.setText(R.string.loading);
         tvLowTide.setText("");
-        tvFishingScoreDescription.setText("");
+        tvFishingScoreDescription.setText(R.string.calculating);
     }
 
     /**
@@ -196,7 +196,9 @@ public class MainActivity extends AppCompatActivity {
 
         tvWavePeriod.setText(String.format(getString(R.string.wave_period_s), DisplayFormatter.formatDecimal(data.getWavePeriod(), "s")));
 
-        tvMoonPhase.setText(getString(R.string.moon_phase_s,getString(DisplayFormatter.getMoonPhaseStringRes(data.getMoonPhase()))));
+        tvMoonPhase.setText(getString(R.string.moon_phase_s,DisplayFormatter.formatMoonPhaseIcon(data.getMoonPhase()) + " " + getString(DisplayFormatter.getMoonPhaseStringRes(data.getMoonPhase()))
+                )
+        );
 
         tvHighTide.setText(String.format(getString(R.string.next_high_tide_s_s), highTideTime, highTideHeight));
 
@@ -210,12 +212,16 @@ public class MainActivity extends AppCompatActivity {
 
         if (score >= 80) {
             tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_green_dark));
+            tvFishingScore.setTextColor(getColor(android.R.color.holo_green_dark));
         } else if (score >= 60) {
             tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_blue_dark));
+            tvFishingScore.setTextColor(getColor(android.R.color.holo_blue_dark));
         } else if (score >= 40) {
             tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_orange_dark));
+            tvFishingScore.setTextColor(getColor(android.R.color.holo_orange_dark));
         } else {
             tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_red_dark));
+            tvFishingScore.setTextColor(getColor(android.R.color.holo_red_dark));
         }
     }
 
@@ -272,6 +278,21 @@ public class MainActivity extends AppCompatActivity {
                 selectedDateTime.getYear(),
                 selectedDateTime.getMonthValue() - 1,
                 selectedDateTime.getDayOfMonth()
+        );
+
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime maxDate = today.plusDays(9);
+
+        datePickerDialog.getDatePicker().setMinDate(
+                today.atZone(java.time.ZoneId.systemDefault())
+                        .toInstant()
+                        .toEpochMilli()
+        );
+
+        datePickerDialog.getDatePicker().setMaxDate(
+                maxDate.atZone(java.time.ZoneId.systemDefault())
+                        .toInstant()
+                        .toEpochMilli()
         );
 
         datePickerDialog.show();

@@ -156,4 +156,26 @@ private DisplayFormatter () {
                     .format(OUTPUT_DATE_TIME);
         }
     }
+    public static String formatMoonPhaseIcon(MoonPhase moonPhase) {
+        switch (moonPhase) {
+            case NEW_MOON:
+                return "🌑";
+            case WAXING_CRESCENT:
+                return "🌒";
+            case FIRST_QUARTER:
+                return "🌓";
+            case WAXING_GIBBOUS:
+                return "🌔";
+            case FULL_MOON:
+                return "🌕";
+            case WANING_GIBBOUS:
+                return "🌖";
+            case LAST_QUARTER:
+                return "🌗";
+            case WANING_CRESCENT:
+                return "🌘";
+            default:
+                return "🌙";
+        }
+    }
 }

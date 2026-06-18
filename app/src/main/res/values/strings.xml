@@ -38,4 +38,11 @@
     <string name="waning_gibbous">Waning Gibbous</string>
     <string name="last_quarter">Last Quarter</string>
     <string name="waning_crescent">Waning Crescent</string>
+    <string name="swipe_for_more_details">Swipe for more details</string>
+    <string name="thermostat">thermostat</string>
+    <string name="wind">Wind</string>
+    <string name="down_arrow">↓</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+    <string name="calculating">Calculating…</string>
 </resources>
