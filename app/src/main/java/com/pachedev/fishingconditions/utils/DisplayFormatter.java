@@ -91,6 +91,10 @@ private DisplayFormatter () {
      * @return formatted value with unit
      */
     public static String formatDecimal(Double value, String unit) {
+        if (value == null) {
+            return "N/A";
+        }
+
         return String.format("%.1f %s", value, unit);
     }
 
