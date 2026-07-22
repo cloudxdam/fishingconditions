@@ -1,8 +1,8 @@
 # FishingConditions
 
-FishingConditions is an Android app built in Java to help users check whether a fishing session looks promising for a selected coastal spot in South Tenerife. It combines weather, sea state, tides, moon phase, and a custom fishing score in a single screen.
+FishingConditions is an Android app built in Java to help users check whether a fishing session looks promising for a selected coastal spot in Tenerife. It combines weather, sea state, tides, moon phase, and a custom fishing score in a single screen.
 
-This project is part of my Java developer portfolio and focuses on API integration, local persistence, business logic, and incremental quality improvements through testing.
+I built it because, as a recreational fisherman, I had to check several different apps before planning a fishing session. With FishingConditions, I can see the data that matters to me in one place and decide which beach or fishing spot is the best option on my days off.
 
 ## Highlights
 
@@ -16,7 +16,7 @@ This project is part of my Java developer portfolio and focuses on API integrati
 ## What the app does
 
 - lets the user choose a predefined fishing spot
-- lets the user choose date and hour
+- lets the user choose a date and time
 - fetches weather data for the selected moment
 - fetches marine conditions for the same location and time
 - retrieves tide data and caches it locally with Room
@@ -36,11 +36,17 @@ This project is part of my Java developer portfolio and focuses on API integrati
 
 ## Screenshots
 
-Add your screenshots to a `screenshots/` folder in the project root and update the image names below.
+Screenshots are stored in the `screenshots/` folder in the project root.
+
+Recommended screenshots for this README:
+
+- `home-screen.png` - main screen overview
+- `conditions-result.png` - full fishing conditions result
+- `date-time-selection.png` - date and time selection flow
 
 ![Home screen](screenshots/home-screen.png)
-![Conditions result](screenshots/conditions-result.png)
-![Date and time selection](screenshots/date-time-selection.png)
+![Conditions result](screenshots/conditions-result.png) 
+![Conditions result 2](screenshots/conditions-result2.png)
 
 ## Tech stack
 
@@ -61,7 +67,9 @@ Add your screenshots to a `screenshots/` folder in the project root and update t
 
 ## Why I built it
 
-I wanted to build a small but complete Android project in Java that goes beyond a basic CRUD app. The goal was to work with:
+As a recreational fisherman, I wanted a simpler way to plan my fishing sessions and choose where to go on my days off. Instead of switching between multiple apps for weather, marine conditions, tides, and moon phase, I built a single app that brings everything together in one place.
+
+At the same time, this project helped me practice and demonstrate:
 
 - external APIs
 - date and time handling
@@ -78,12 +86,12 @@ I wanted to build a small but complete Android project in Java that goes beyond 
 
 ## Testing and quality work
 
-This project includes an initial test baseline for core utility logic:
+This project includes unit tests for core utility logic:
 
 - `DisplayFormatterTest`
 - `FishingScoreCalculatorTest`
 - `MoonPhaseCalculatorTest`
-- corrected `ExampleInstrumentedTest`
+- basic instrumentation test
 
 One concrete bug fixed during this process:
 
@@ -144,7 +152,7 @@ TIDECHECK_API_KEY=your_tidecheck_api_key
 
 ## Current status
 
-This is a functional MVP and a portfolio project focused on demonstrating practical Java and Android development skills.
+This is a functional MVP that also serves as a portfolio project focused on demonstrating practical Java and Android development skills.
 
 ## Possible next improvements
 
