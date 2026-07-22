@@ -38,11 +38,13 @@ I built it because, as a recreational fisherman, I had to check several differen
 
 Screenshots are stored in the `screenshots/` folder in the project root.
 
-- `home-screen.png` - main screen overview
+`home-screen.png` - main screen overview
+
 ![Home screen](screenshots/home-screen.png)
 
-- `conditions-result.png` - full fishing conditions result
-![Conditions result](screenshots/conditions-result.png) 
+`conditions-result.png` - full fishing conditions result
+
+![Conditions result](screenshots/conditions-result.png)
 ![Conditions result 2](screenshots/conditions-result2.png)
 
 ## Tech stack
