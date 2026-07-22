@@ -18,6 +18,7 @@ import com.pachedev.fishingconditions.model.domain.FishingSpot;
 import com.pachedev.fishingconditions.utils.DisplayFormatter;
 import com.pachedev.fishingconditions.data.local.FishingSpotProvider;
 
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
@@ -242,12 +243,12 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayAdapter<FishingSpot> adapter = new ArrayAdapter<>(
                 this,
-                android.R.layout.simple_spinner_item,
+                R.layout.spinner_item,
                 fishingSpots
         );
 
         adapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item
+                R.layout.spinner_dropdown_item
         );
 
         spinnerSpot.setAdapter(adapter);

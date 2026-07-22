@@ -63,7 +63,7 @@
             <Spinner
                 android:id="@+id/spinnerSpot"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp" />
 
             <LinearLayout
@@ -179,7 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="48sp"
+                android:textSize="40sp"
                 android:fontFamily="sans-serif-black"
                 android:textColor="#EA580C" />
 
@@ -188,7 +188,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="18sp"
+                android:textSize="28sp"
+                android:textStyle="bold"
                 android:fontFamily="sans-serif-medium"
                 android:textColor="#334155" />
 
