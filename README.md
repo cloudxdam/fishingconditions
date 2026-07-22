@@ -38,13 +38,10 @@ I built it because, as a recreational fisherman, I had to check several differen
 
 Screenshots are stored in the `screenshots/` folder in the project root.
 
-Recommended screenshots for this README:
-
 - `home-screen.png` - main screen overview
-- `conditions-result.png` - full fishing conditions result
-- `date-time-selection.png` - date and time selection flow
-
 ![Home screen](screenshots/home-screen.png)
+
+- `conditions-result.png` - full fishing conditions result
 ![Conditions result](screenshots/conditions-result.png) 
 ![Conditions result 2](screenshots/conditions-result2.png)
 
@@ -158,7 +155,7 @@ This is a functional MVP that also serves as a portfolio project focused on demo
 
 - move UI state to a `ViewModel`
 - add more fishing spots
-- improve app presentation with screenshots or demo media
+- improve app presentation
 
 ## Notes
 
