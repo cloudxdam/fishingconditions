@@ -2,9 +2,26 @@ package com.pachedev.fishingconditions.utils;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Locale;
+
 public class DisplayFormatterTest {
+
+    private Locale originalLocale;
+
+    @Before
+    public void setUp() {
+        originalLocale = Locale.getDefault();
+        Locale.setDefault(new Locale("es", "ES"));
+    }
+
+    @After
+    public void tearDown() {
+        Locale.setDefault(originalLocale);
+    }
 
     @Test
     public void formatTime_returnsNA_whenValueIsNull() {
