@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textSize="20sp"
-    android:textColor="#0F172A"
+    android:textColor="?attr/colorOnSurface"
     android:fontFamily="sans-serif-medium"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
