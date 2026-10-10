@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:textSize="22sp"
     android:textStyle="bold"
-    android:textColor="#0F172A"
+    android:textColor="?attr/colorOnSurface"
     android:fontFamily="sans-serif-medium"
     android:padding="10dp"
     android:ellipsize="end"
