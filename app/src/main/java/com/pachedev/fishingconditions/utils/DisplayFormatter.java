@@ -107,21 +107,21 @@ private DisplayFormatter () {
     public static String formatWindDirection(double degrees) {
 
         if (degrees >= 337.5 || degrees < 22.5) {
-            return "↑ N";
+            return "↓ N";
         } else if (degrees < 67.5) {
-            return "↗ NE";
+            return "↙ NE";
         } else if (degrees < 112.5) {
-            return "→ E";
+            return "← E";
         } else if (degrees < 157.5) {
-            return "↘ SE";
+            return "↖ SE";
         } else if (degrees < 202.5) {
-            return "↓ S";
+            return "↑ S";
         } else if (degrees < 247.5) {
-            return "↙ SW";
+            return "↗ SW";
         } else if (degrees < 292.5) {
-            return "← W";
+            return "→ W";
         } else {
-            return "↖ NW";
+            return "↘ NW";
         }
     }
 
