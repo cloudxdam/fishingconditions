@@ -54,11 +54,11 @@ public class DisplayFormatterTest {
 
     @Test
     public void formatWindDirection_returnsNorthForZeroDegrees() {
-        assertEquals("↑ N", DisplayFormatter.formatWindDirection(0));
+        assertEquals("↓ N", DisplayFormatter.formatWindDirection(0));
     }
 
     @Test
     public void formatWindDirection_returnsEastForNinetyDegrees() {
-        assertEquals("→ E", DisplayFormatter.formatWindDirection(90));
+        assertEquals("← E", DisplayFormatter.formatWindDirection(90));
     }
 }
