@@ -373,7 +373,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="@string/sunset"
+                    android:contentDescription="@string/wave_height"
                     android:src="@drawable/waves" />
                 <TextView android:id="@+id/tvWaveHeight"
                     android:layout_width="wrap_content"
@@ -393,7 +393,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="@string/sunset"
+                    android:contentDescription="@string/wave_period"
                     android:src="@drawable/timer" />
                 <TextView android:id="@+id/tvWavePeriod"
                     android:layout_width="wrap_content"
@@ -441,7 +441,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="@string/sunset"
+                    android:contentDescription="@string/high_tide"
                     android:src="@drawable/up_arrow" />
 
                 <TextView android:id="@+id/tvHighTide"
@@ -463,7 +463,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:contentDescription="@string/sunset"
+                    android:contentDescription="@string/low_tide"
                     android:src="@drawable/down_arrow" />
 
                 <TextView android:id="@+id/tvLowTide"
