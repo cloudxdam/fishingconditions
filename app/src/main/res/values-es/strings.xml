@@ -45,4 +45,8 @@
     <string name="sunrise">Amanecer</string>
     <string name="sunset">Atardecer</string>
     <string name="calculating">Calculando…</string>
+    <string name="wave_height">Altura de ola</string>
+    <string name="wave_period">Período de ola</string>
+    <string name="high_tide">Marea alta</string>
+    <string name="low_tide">Marea baja</string>
 </resources>

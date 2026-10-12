@@ -45,4 +45,8 @@
     <string name="sunrise">Sunrise</string>
     <string name="sunset">Sunset</string>
     <string name="calculating">Calculating…</string>
+    <string name="wave_height">Wave height</string>
+    <string name="wave_period">Wave period</string>
+    <string name="high_tide">High tide</string>
+    <string name="low_tide">Low tide</string>
 </resources>
