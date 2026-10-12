@@ -10,5 +10,6 @@
         <item name="colorOnSurface">@color/on_card_surface</item>
         <item name="colorOnSurfaceVariant">@color/on_card_surface_variant</item>
         <item name="colorOutline">@color/card_outline</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
 </resources>
