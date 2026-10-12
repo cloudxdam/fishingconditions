@@ -2,7 +2,10 @@ package com.pachedev.fishingconditions.ui;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -10,6 +13,9 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.pachedev.fishingconditions.R;
 import com.pachedev.fishingconditions.data.repository.FishingConditionsRepository;
@@ -58,6 +64,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        View scrollRoot = findViewById(R.id.scrollRoot);
+        if (scrollRoot == null) {
+            scrollRoot = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        }
+        final View scrollRootView = scrollRoot;
+        ViewCompat.setOnApplyWindowInsetsListener(scrollRootView, (v, windowInsets) -> {
+            boolean isLandscape = getResources().getConfiguration().orientation
+                    == Configuration.ORIENTATION_LANDSCAPE;
+            if (isLandscape) {
+                Insets bars = windowInsets.getInsets(
+                        WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+                v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            } else {
+                v.setPadding(0, 0, 0, 0);
+            }
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         tvTemperature = findViewById(R.id.tvTemperature);
         tvWind = findViewById(R.id.tvWind);
