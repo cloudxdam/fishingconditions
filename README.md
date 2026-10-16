@@ -70,9 +70,8 @@ Screenshots are stored in the `screenshots/` folder in the project root.
 
 ## Data sources
 
-- Open-Meteo Weather API
-- Open-Meteo Marine API
-- TideCheck API
+- [Weather data by Open-Meteo.com](https://open-meteo.com/) (forecast + marine APIs) — data licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); free tier is for non-commercial use
+- [Tide data by TideCheck](https://tidecheck.com) ([API docs](https://tidecheck.com/developers)) — visible attribution required by their terms of use
 
 ## Why I built it
 

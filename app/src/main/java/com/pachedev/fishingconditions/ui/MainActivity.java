@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
                         WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
                 v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
             } else {
-                v.setPadding(0, 0, 0, 0);
+                Insets nav = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars());
+                v.setPadding(0, 0, 0, nav.bottom);
             }
             return WindowInsetsCompat.CONSUMED;
         });

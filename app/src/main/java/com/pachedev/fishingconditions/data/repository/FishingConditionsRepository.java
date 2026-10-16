@@ -44,6 +44,8 @@ import retrofit2.Response;
  */
 public class FishingConditionsRepository {
 
+    private static final long TIDE_CACHE_TTL_MS = 24L * 60L * 60L * 1000L;
+
     private final WeatherApiService weatherApiService;
     private final MarineApiService marineApiService;
     private final TideCheckApiService tideCheckApiService;
@@ -189,6 +191,8 @@ public class FishingConditionsRepository {
         String selectedDate = selectedDateTime.toLocalDate().toString();
 
         databaseExecutor.execute(() -> {
+            tideDao.deleteOlderThan(System.currentTimeMillis() - TIDE_CACHE_TTL_MS);
+
             TideEntity cachedTide = tideDao.findBySpotAndDate(
                     spot.getLatitude(),
                     spot.getLongitude(),

@@ -49,4 +49,5 @@
     <string name="wave_period">Wave period</string>
     <string name="high_tide">High tide</string>
     <string name="low_tide">Low tide</string>
+    <string name="data_sources">Weather data by Open-Meteo.com · Tide data by tidecheck.com</string>
 </resources>
