@@ -2,17 +2,27 @@ package com.pachedev.fishingconditions.data.local;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 /**
  * Room database for local tide cache.
  */
-@Database(entities = {TideEntity.class}, version = 1)
+@Database(entities = {TideEntity.class}, version = 2, exportSchema = false)
 public abstract class TideDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "fishing_conditions_db";
+
+    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE tide_cache ADD COLUMN cachedAt INTEGER NOT NULL DEFAULT 0");
+        }
+    };
 
     private static volatile TideDatabase instance;
 
@@ -26,7 +36,8 @@ public abstract class TideDatabase extends RoomDatabase {
                             context.getApplicationContext(),
                             TideDatabase.class,
                             DATABASE_NAME
-                    ).build();
+                    ).addMigrations(MIGRATION_1_2)
+                     .build();
                 }
             }
         }

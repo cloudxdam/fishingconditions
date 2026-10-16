@@ -21,6 +21,8 @@ public class TideEntity {
     private String nextLowTideTime;
     private Double nextLowTideHeight;
 
+    private long cachedAt;
+
     public TideEntity(double latitude,
                       double longitude,
                       String date,
@@ -35,6 +37,7 @@ public class TideEntity {
         this.nextHighTideHeight = nextHighTideHeight;
         this.nextLowTideTime = nextLowTideTime;
         this.nextLowTideHeight = nextLowTideHeight;
+        this.cachedAt = System.currentTimeMillis();
     }
 
     public int getId() {
@@ -71,5 +74,13 @@ public class TideEntity {
 
     public Double getNextLowTideHeight() {
         return nextLowTideHeight;
+    }
+
+    public long getCachedAt() {
+        return cachedAt;
+    }
+
+    public void setCachedAt(long cachedAt) {
+        this.cachedAt = cachedAt;
     }
 }
