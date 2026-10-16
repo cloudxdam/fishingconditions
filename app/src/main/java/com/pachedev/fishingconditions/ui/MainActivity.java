@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.pachedev.fishingconditions.R;
 import com.pachedev.fishingconditions.data.repository.FishingConditionsRepository;
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvFishingScoreDescription;
     private FishingConditionsRepository fishingConditionsRepository;
     private Spinner spinnerSpot;
-    private LocalDateTime selectedDateTime = LocalDateTime.now();
+    private MainViewModel viewModel;
 
 
     /**
@@ -110,6 +112,11 @@ public class MainActivity extends AppCompatActivity {
         btnSelectDate.setOnClickListener(v -> showDatePicker());
 
         fishingConditionsRepository = new FishingConditionsRepository(this);
+
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        restoreSelectionFromViewModel();
+        observeConditions();
+        setupSpotSelectionTracking();
     }
 
     /**
@@ -119,11 +126,14 @@ public class MainActivity extends AppCompatActivity {
         TimePickerDialog timePickerDialog = new TimePickerDialog(
                 this,
                 (view, hourOfDay, minute) -> {
-                    selectedDateTime = selectedDateTime
-                            .withHour(hourOfDay)
-                            .withMinute(0)
-                            .withSecond(0)
-                            .withNano(0);
+                    viewModel.setSelectedDateTime(
+                            viewModel.getSelectedDateTime()
+                                    .withHour(hourOfDay)
+                                    .withMinute(0)
+                                    .withSecond(0)
+                                    .withNano(0)
+                    );
+                    viewModel.setTimeTouched(true);
 
                     tvSelectedTime.setText(
                             String.format(
@@ -132,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                                     hourOfDay)
                     );
                 },
-                selectedDateTime.getHour(),
+                viewModel.getSelectedDateTime().getHour(),
                 0,
                 true
         );
@@ -141,25 +151,96 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Restores spot selection, date and time labels after a configuration change.
+     */
+    private void restoreSelectionFromViewModel() {
+        String savedSpotName = viewModel.getSelectedSpotName();
+        if (savedSpotName != null) {
+            for (int i = 0; i < spinnerSpot.getCount(); i++) {
+                if (savedSpotName.equals(String.valueOf(spinnerSpot.getItemAtPosition(i)))) {
+                    spinnerSpot.setSelection(i);
+                    break;
+                }
+            }
+        }
+
+        if (viewModel.isDateTouched()) {
+            tvSelectedDate.setText(String.format(
+                    getString(R.string.selected_date_s),
+                    viewModel.getSelectedDateTime().toLocalDate()
+            ));
+        }
+
+        if (viewModel.isTimeTouched()) {
+            tvSelectedTime.setText(String.format(
+                    Locale.getDefault(),
+                    getString(R.string.selected_time_02d_00),
+                    viewModel.getSelectedDateTime().getHour()
+            ));
+        }
+    }
+
+    /**
+     * Rebinds loaded conditions, errors and loading state whenever they change,
+     * including the values emitted again after the activity is recreated.
+     */
+    private void observeConditions() {
+        viewModel.getData().observe(this, fishingConditionsData -> {
+            if (fishingConditionsData != null) {
+                showFishingConditions(fishingConditionsData);
+            }
+        });
+
+        viewModel.getError().observe(this, errorMessage -> {
+            if (errorMessage != null) {
+                showError(errorMessage);
+            }
+        });
+
+        viewModel.getLoading().observe(this, isLoading -> {
+            if (Boolean.TRUE.equals(isLoading)) {
+                setLoadingState();
+            }
+        });
+    }
+
+    /**
+     * Keeps the selected spot in the view model so it can be restored after rotation.
+     */
+    private void setupSpotSelectionTracking() {
+        spinnerSpot.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                viewModel.setSelectedSpotName(((FishingSpot) parent.getItemAtPosition(position)).getName());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
+    /**
      * Requests fishing conditions for the selected spot, date and time.
      */
     private void loadFishingConditions() {
-        setLoadingState();
-
         FishingSpot selectedSpot = (FishingSpot) spinnerSpot.getSelectedItem();
+
+        viewModel.setSelectedSpotName(selectedSpot.getName());
+        viewModel.startLoading();
 
         fishingConditionsRepository.getFishingConditions(
                 selectedSpot,
-                selectedDateTime,
+                viewModel.getSelectedDateTime(),
                 new FishingConditionsRepository.FishingConditionsCallback() {
                     @Override
                     public void onSuccess(FishingConditionsData fishingConditionsData) {
-                        showFishingConditions(fishingConditionsData);
+                        viewModel.publishSuccess(fishingConditionsData);
                     }
 
                     @Override
                     public void onError(String errorMessage) {
-                        showError(errorMessage);
+                        viewModel.publishError(errorMessage);
                     }
                 }
         );
@@ -284,26 +365,30 @@ public class MainActivity extends AppCompatActivity {
      */
     private void showDatePicker() {
 
+        LocalDateTime currentDateTime = viewModel.getSelectedDateTime();
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,
                 (view, year, month, dayOfMonth) -> {
 
-                    selectedDateTime = LocalDateTime.of(
+                    LocalDateTime updatedDateTime = LocalDateTime.of(
                             year,
                             month + 1,
                             dayOfMonth,
-                            selectedDateTime.getHour(),
-                            selectedDateTime.getMinute()
+                            currentDateTime.getHour(),
+                            currentDateTime.getMinute()
                     );
+                    viewModel.setSelectedDateTime(updatedDateTime);
+                    viewModel.setDateTouched(true);
 
                     tvSelectedDate.setText(
-                            String.format(getString(R.string.selected_date_s), selectedDateTime.toLocalDate())
+                            String.format(getString(R.string.selected_date_s), updatedDateTime.toLocalDate())
                     );
 
                 },
-                selectedDateTime.getYear(),
-                selectedDateTime.getMonthValue() - 1,
-                selectedDateTime.getDayOfMonth()
+                currentDateTime.getYear(),
+                currentDateTime.getMonthValue() - 1,
+                currentDateTime.getDayOfMonth()
         );
 
         LocalDateTime today = LocalDateTime.now();
