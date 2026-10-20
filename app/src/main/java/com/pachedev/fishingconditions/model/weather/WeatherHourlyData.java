@@ -1,4 +1,4 @@
-package com.pachedev.fishingconditions.model;
+package com.pachedev.fishingconditions.model.weather;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  * Each list contains values for the same hours.
  * For example, index 0 in all lists refers to the same time.
  */
-public class HourlyData {
+public class WeatherHourlyData {
 
     /** Hour timestamps (e.g. "2026-04-05T00:00") */
     @SerializedName("time")
@@ -23,6 +23,10 @@ public class HourlyData {
     @SerializedName("wind_speed_10m")
     private List<Double> windSpeed10m;
 
+    /** Wind direction at 10 meters */
+    @SerializedName("wind_direction_10m")
+    private List<Double> windDirection10m;
+
     public List<String> getTime() {
         return time;
     }
@@ -33,5 +37,8 @@ public class HourlyData {
 
     public List<Double> getWindSpeed10m() {
         return windSpeed10m;
+    }
+
+    public List<Double> getWindDirection10m() { return windDirection10m;
     }
 }

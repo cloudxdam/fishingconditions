@@ -1,6 +1,6 @@
 package com.pachedev.fishingconditions.data.network;
 
-import com.pachedev.fishingconditions.model.WeatherResponse;
+import com.pachedev.fishingconditions.model.weather.WeatherResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -8,7 +8,7 @@ import retrofit2.http.Query;
 /**
  * Retrofit service interface for Open-Meteo Weather API.
  */
-public interface OpenMeteoApiService {
+public interface WeatherApiService {
 
     @GET("forecast")
     Call<WeatherResponse> getWeatherData(
@@ -16,6 +16,8 @@ public interface OpenMeteoApiService {
             @Query("longitude") double longitude,
             @Query("hourly") String hourly,
             @Query("daily") String daily,
-            @Query("timezone") String timezone
+            @Query("timezone") String timezone,
+            @Query("start_date") String startDate,
+            @Query("end_date") String endDate
     );
 }

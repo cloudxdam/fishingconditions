@@ -1,4 +1,4 @@
-package com.pachedev.fishingconditions.model;
+package com.pachedev.fishingconditions.model.weather;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -11,17 +11,17 @@ public class WeatherResponse {
 
     /** Hourly weather data */
     @SerializedName("hourly")
-    private HourlyData hourly;
+    private WeatherHourlyData hourly;
 
     /** Daily weather data */
     @SerializedName("daily")
-    private DailyData daily;
+    private WeatherDailyData daily;
 
-    public HourlyData getHourly() {
+    public WeatherHourlyData getHourly() {
         return hourly;
     }
 
-    public DailyData getDaily() {
+    public WeatherDailyData getDaily() {
         return daily;
     }
 }

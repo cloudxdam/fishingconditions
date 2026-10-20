@@ -1,4 +1,4 @@
-package com.pachedev.fishingconditions.model;
+package com.pachedev.fishingconditions.model.weather;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
  *
  * Each list contains values for the same day.
  */
-public class DailyData {
+public class WeatherDailyData {
 
     /** Dates (e.g. "2026-04-05") */
     @SerializedName("time")
