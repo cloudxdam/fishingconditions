@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.pachedev.fishingconditions.BuildConfig;
 import com.pachedev.fishingconditions.data.local.TideDao;
 import com.pachedev.fishingconditions.data.local.TideDatabase;
 import com.pachedev.fishingconditions.data.local.TideEntity;
@@ -24,6 +25,7 @@ import com.pachedev.fishingconditions.model.tidecheck.TideCheckResponse;
 import com.pachedev.fishingconditions.model.weather.WeatherResponse;
 import com.pachedev.fishingconditions.utils.FishingScoreCalculator;
 import com.pachedev.fishingconditions.utils.MoonPhaseCalculator;
+import com.pachedev.fishingconditions.utils.SampleTideCalculator;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -152,13 +154,23 @@ public class FishingConditionsRepository {
             public void onResponse(Call<MarineResponse> call,
                                    Response<MarineResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    loadTideData(
-                            spot,
-                            selectedDateTime,
-                            weatherResponse,
-                            response.body(),
-                            callback
-                    );
+                    if (BuildConfig.DEMO_TIDES_DISABLED) {
+                        buildFishingConditions(
+                                weatherResponse,
+                                response.body(),
+                                SampleTideCalculator.calculateNext(selectedDateTime),
+                                selectedDateTime,
+                                callback
+                        );
+                    } else {
+                        loadTideData(
+                                spot,
+                                selectedDateTime,
+                                weatherResponse,
+                                response.body(),
+                                callback
+                        );
+                    }
                 } else {
                     callback.onError("Marine response error: " + response.code());
                 }

@@ -19,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.pachedev.fishingconditions.BuildConfig;
 import com.pachedev.fishingconditions.R;
 import com.pachedev.fishingconditions.data.repository.FishingConditionsRepository;
 import com.pachedev.fishingconditions.model.domain.FishingConditionsData;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvSelectedTime;
     private TextView tvFishingScore;
     private TextView tvFishingScoreDescription;
+    private TextView tvDemoTidesNotice;
     private FishingConditionsRepository fishingConditionsRepository;
     private Spinner spinnerSpot;
     private MainViewModel viewModel;
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         tvSelectedTime = findViewById(R.id.tvSelectedTime);
         tvFishingScore = findViewById(R.id.tvFishingScore);
         tvFishingScoreDescription = findViewById(R.id.tvFishingScoreDescription);
+        tvDemoTidesNotice = findViewById(R.id.tvDemoTidesNotice);
 
         btnSelectTime.setOnClickListener(v -> showTimePicker());
 
@@ -117,6 +120,10 @@ public class MainActivity extends AppCompatActivity {
         restoreSelectionFromViewModel();
         observeConditions();
         setupSpotSelectionTracking();
+
+        if (BuildConfig.DEMO_TIDES_DISABLED) {
+            tvDemoTidesNotice.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -268,22 +275,6 @@ public class MainActivity extends AppCompatActivity {
      * @param data fishing conditions data
      */
     private void showFishingConditions(FishingConditionsData data) {
-        String highTideTime = DisplayFormatter.formatDateTime(
-                data.getTideInfo().getNextHighTideTime()
-        );
-
-        String highTideHeight = DisplayFormatter.formatDecimal(
-                data.getTideInfo().getNextHighTideHeight(), "m"
-        );
-
-        String lowTideTime = DisplayFormatter.formatDateTime(
-                data.getTideInfo().getNextLowTideTime()
-        );
-
-        String lowTideHeight = DisplayFormatter.formatDecimal(
-                data.getTideInfo().getNextLowTideHeight(), "m"
-        );
-
         tvTemperature.setText(String.format(getString(R.string.temperature_s), DisplayFormatter.formatDecimal(data.getTemperature(), "°C")));
 
         tvWind.setText(
@@ -307,28 +298,51 @@ public class MainActivity extends AppCompatActivity {
                 )
         );
 
-        tvHighTide.setText(String.format(getString(R.string.next_high_tide_s_s), highTideTime, highTideHeight));
+        if (data.getTideInfo() != null) {
+            String highTideTime = DisplayFormatter.formatDateTime(
+                    data.getTideInfo().getNextHighTideTime()
+            );
 
-        tvLowTide.setText(String.format(getString(R.string.next_low_tide_s_s), lowTideTime, lowTideHeight));
+            String highTideHeight = DisplayFormatter.formatDecimal(
+                    data.getTideInfo().getNextHighTideHeight(), "m"
+            );
 
-        tvFishingScore.setText(String.format(Locale.getDefault(),getString(R.string.fishing_score_d_100),data.getFishingScore()));
+            String lowTideTime = DisplayFormatter.formatDateTime(
+                    data.getTideInfo().getNextLowTideTime()
+            );
 
-        int score = data.getFishingScore();
+            String lowTideHeight = DisplayFormatter.formatDecimal(
+                    data.getTideInfo().getNextLowTideHeight(), "m"
+            );
 
-        tvFishingScoreDescription.setText(DisplayFormatter.getFishingScoreDescriptionRes(score));
+            tvHighTide.setText(String.format(getString(R.string.next_high_tide_s_s), highTideTime, highTideHeight));
 
-        if (score >= 80) {
-            tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_green_dark));
-            tvFishingScore.setTextColor(getColor(android.R.color.holo_green_dark));
-        } else if (score >= 60) {
-            tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_blue_dark));
-            tvFishingScore.setTextColor(getColor(android.R.color.holo_blue_dark));
-        } else if (score >= 40) {
-            tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_orange_dark));
-            tvFishingScore.setTextColor(getColor(android.R.color.holo_orange_dark));
+            tvLowTide.setText(String.format(getString(R.string.next_low_tide_s_s), lowTideTime, lowTideHeight));
+
+            tvFishingScore.setText(String.format(Locale.getDefault(),getString(R.string.fishing_score_d_100),data.getFishingScore()));
+
+            int score = data.getFishingScore();
+
+            tvFishingScoreDescription.setText(DisplayFormatter.getFishingScoreDescriptionRes(score));
+
+            if (score >= 80) {
+                tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_green_dark));
+                tvFishingScore.setTextColor(getColor(android.R.color.holo_green_dark));
+            } else if (score >= 60) {
+                tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_blue_dark));
+                tvFishingScore.setTextColor(getColor(android.R.color.holo_blue_dark));
+            } else if (score >= 40) {
+                tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_orange_dark));
+                tvFishingScore.setTextColor(getColor(android.R.color.holo_orange_dark));
+            } else {
+                tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_red_dark));
+                tvFishingScore.setTextColor(getColor(android.R.color.holo_red_dark));
+            }
         } else {
-            tvFishingScoreDescription.setTextColor(getColor(android.R.color.holo_red_dark));
-            tvFishingScore.setTextColor(getColor(android.R.color.holo_red_dark));
+            tvHighTide.setText("");
+            tvLowTide.setText("");
+            tvFishingScore.setText("");
+            tvFishingScoreDescription.setText("");
         }
     }
 

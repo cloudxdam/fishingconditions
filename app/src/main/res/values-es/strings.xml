@@ -50,4 +50,5 @@
     <string name="high_tide">Marea alta</string>
     <string name="low_tide">Marea baja</string>
     <string name="data_sources">Datos meteorológicos de Open-Meteo.com · Datos de marea de tidecheck.com</string>
+    <string name="demo_tides_notice">Datos de marea simulados en esta demo — referencia: Santa Cruz de Tenerife (19-10-2026). Para ver las mareas reales obtenga una clave personal de TideCheck (ver README).</string>
 </resources>

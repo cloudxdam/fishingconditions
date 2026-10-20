@@ -402,6 +402,17 @@
                             android:textColor="?attr/colorOnSurface"
                             android:layout_marginBottom="14dp"/>
 
+                        <TextView
+                            android:id="@+id/tvDemoTidesNotice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:text="@string/demo_tides_notice"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:visibility="gone" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

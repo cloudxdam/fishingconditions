@@ -27,6 +27,19 @@ public class FishingScoreCalculatorTest {
         assertEquals(100, score);
     }
     @Test
+    public void calculateScore_withNullTideInfo_scoresBaselineTideComponent() {
+        LocalDateTime selectedDateTime = LocalDateTime.of(2026, 6, 20, 8, 0);
+        int score = FishingScoreCalculator.calculateScore(
+                4.0,
+                1.0,
+                10.0,
+                MoonPhase.FULL_MOON,
+                null,
+                selectedDateTime
+        );
+        assertEquals(90, score);
+    }
+    @Test
     public void calculateScore_returnsLowScore_forPoorConditions() {
         LocalDateTime selectedDateTime = LocalDateTime.of(2026, 6, 20, 8, 0);
         TideInfo tideInfo = new TideInfo(null, null, null, null);
