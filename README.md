@@ -134,6 +134,13 @@ app/src/main/java/com/pachedev/fishingconditions/
 6. The app calculates moon phase and fishing score.
 7. The app displays the aggregated result in the main screen.
 
+## Getting the app
+
+No prebuilt APK is attached to releases: TideCheck API keys are personal and must not be shared, so every build carries its own key.
+
+- **Build it yourself** — follow [Local setup](#local-setup) and use your own free TideCheck key.
+- **Request a demo build** — the `demo` flavor compiles without any key. Weather, sea conditions and moon phase are real (Open-Meteo + local calculation); tides show a clearly labeled sample (Santa Cruz de Tenerife reference + lunar semidiurnal cycle), so the tide-based Fishing Score stays visible. See [Demo build](#demo-build).
+
 ## Local setup
 
 ### Requirements
@@ -156,7 +163,23 @@ TIDECHECK_API_KEY=your_tidecheck_api_key
 1. Clone the repository.
 2. Open the project in Android Studio.
 3. Sync Gradle.
-4. Run the `app` configuration on an emulator or Android device.
+4. Run the `fullDebug` app variant on an emulator or Android device.
+
+### Demo build
+
+The project has two product flavors:
+
+| Flavor | TideCheck API key | Tides & Fishing Score |
+| --- | --- | --- |
+| `full` | yours, from `local.properties` | real TideCheck tides |
+| `demo` | none (empty) | sample tides, labeled on screen |
+
+```bash
+./gradlew assembleDemoDebug   # app/build/outputs/apk/demo/debug/app-demo-debug.apk
+./gradlew assembleFullDebug   # full app, requires TIDECHECK_API_KEY
+```
+
+Demo builds contain no TideCheck key, never call the TideCheck API and never read or write the local tide cache. Weather, sea conditions and moon phase are real (Open-Meteo + local calculation). Tides are an on-screen-labeled sample: extrapolated from real TideCheck extremes for Santa Cruz de Tenerife (2026-10-19) with the mean lunar semidiurnal period (12h25m), which keeps the tide-based Fishing Score visible. It is an illustration, not a real tide prediction.
 
 ## Current status
 
@@ -164,13 +187,12 @@ This is a functional MVP that also serves as a portfolio project focused on demo
 
 ## Possible next improvements
 
-- move UI state to a `ViewModel`
 - add more fishing spots
 - improve app presentation
 
 ## Notes
 
-- `TIDECHECK_API_KEY` is required for TideCheck requests
+- `TIDECHECK_API_KEY` is required for TideCheck requests in the `full` flavor; the `demo` flavor works without it
 
 ## License
 

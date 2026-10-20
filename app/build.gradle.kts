@@ -22,17 +22,29 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
-
-        val tideCheckApiKey = localProperties.getProperty("TIDECHECK_API_KEY") ?: ""
-
-        buildConfigField(
-            "String",
-            "TIDECHECK_API_KEY",
-            "\"$tideCheckApiKey\""
-        )
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    flavorDimensions += "distribution"
+
+    productFlavors {
+        create("full") {
+            dimension = "distribution"
+            buildConfigField(
+                "String",
+                "TIDECHECK_API_KEY",
+                "\"${localProperties.getProperty("TIDECHECK_API_KEY") ?: ""}\""
+            )
+            buildConfigField("boolean", "DEMO_TIDES_DISABLED", "false")
+        }
+        create("demo") {
+            dimension = "distribution"
+            applicationIdSuffix = ".demo"
+            buildConfigField("String", "TIDECHECK_API_KEY", "\"\"")
+            buildConfigField("boolean", "DEMO_TIDES_DISABLED", "true")
+        }
     }
 
     buildFeatures {

@@ -50,4 +50,5 @@
     <string name="high_tide">High tide</string>
     <string name="low_tide">Low tide</string>
     <string name="data_sources">Weather data by Open-Meteo.com · Tide data by tidecheck.com</string>
+    <string name="demo_tides_notice">Simulated tide data in this demo — reference: Santa Cruz de Tenerife (2026-10-19). For real tides get a personal TideCheck key (see README).</string>
 </resources>
