@@ -109,7 +109,7 @@ public class FishingSpotProvider {
                 new FishingSpot("El Pris", 28.509799, -16.421608),
                 new FishingSpot("La Barranquera", 28.537182, -16.398179),
                 new FishingSpot("Jóver", 28.547232, -16.369330),
-                new FishingSpot("Bajamar (Tenerife)", 28.557475, -16.343880),
+                new FishingSpot("Bajamar", 28.557475, -16.343880),
                 new FishingSpot("Punta del Hidalgo", 28.576245, -16.329939),
                 new FishingSpot("Los Troches", 28.571482, -16.311433),
                 new FishingSpot("Playa de Benijo", 28.572954, -16.192898),
