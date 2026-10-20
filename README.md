@@ -136,10 +136,10 @@ app/src/main/java/com/pachedev/fishingconditions/
 
 ## Getting the app
 
-No prebuilt APK is attached to releases: TideCheck API keys are personal and must not be shared, so every build carries its own key.
+Every GitHub release ships the **keyless demo APK** — install it directly, no build and no key required.
 
-- **Build it yourself** — follow [Local setup](#local-setup) and use your own free TideCheck key.
-- **Request a demo build** — the `demo` flavor compiles without any key. Weather, sea conditions and moon phase are real (Open-Meteo + local calculation); tides show a clearly labeled sample (Santa Cruz de Tenerife reference + lunar semidiurnal cycle), so the tide-based Fishing Score stays visible. See [Demo build](#demo-build).
+- **Download the demo** — grab the release asset (e.g. `fishingconditions-demo-v1.0.0.apk`) from the [Releases](https://github.com/cloudxdam/fishingconditions/releases) page. Weather, sea conditions and moon phase are real (Open-Meteo + local calculation); tides show a clearly labeled simulation (Santa Cruz de Tenerife reference + lunar semidiurnal cycle), so the tide-based Fishing Score stays visible. See [Demo build](#demo-build).
+- **Build the full app yourself** — follow [Local setup](#local-setup) and use your own free TideCheck key. No prebuilt full APK is attached: TideCheck API keys are personal and must not be shared, so every full build carries its own key.
 
 ## Local setup
 
@@ -180,6 +180,8 @@ The project has two product flavors:
 ```
 
 Demo builds contain no TideCheck key, never call the TideCheck API and never read or write the local tide cache. Weather, sea conditions and moon phase are real (Open-Meteo + local calculation). Tides are an on-screen-labeled sample: extrapolated from real TideCheck extremes for Santa Cruz de Tenerife (2026-10-19) with the mean lunar semidiurnal period (12h25m), which keeps the tide-based Fishing Score visible. It is an illustration, not a real tide prediction.
+
+Each GitHub release also attaches the demo APK built from the tagged commit, so the app can be installed without a build environment.
 
 ## Current status
 
