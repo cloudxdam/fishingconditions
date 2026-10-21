@@ -1,5 +1,7 @@
 # FishingConditions
 
+[![CI](https://github.com/cloudxdam/fishingconditions/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/cloudxdam/fishingconditions/actions/workflows/ci.yml)
+
 FishingConditions is an Android app built in Java to help users check whether a fishing session looks promising for a selected coastal spot in Tenerife. It combines weather, sea state, tides, moon phase, and a custom fishing score in a single screen.
 
 I built it because, as a recreational fisherman, I had to check several different apps before planning a fishing session. With FishingConditions, I can see the data that matters to me in one place and decide which beach or fishing spot is the best option on my days off.
